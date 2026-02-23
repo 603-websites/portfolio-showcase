@@ -1,6 +1,6 @@
 import { useParams, Link, Navigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { ArrowLeft, ExternalLink, Github, Calendar, Clock, Users, CheckCircle } from 'lucide-react'
+import { ArrowLeft, ExternalLink, Calendar, Clock, Users, CheckCircle } from 'lucide-react'
 import TextReveal from '../components/TextReveal'
 import SectionReveal from '../components/SectionReveal'
 import { projects } from '../data/projects'
@@ -47,17 +47,6 @@ export default function ProjectDetail() {
             >
               View Live <ExternalLink size={16} />
             </a>
-            {project.githubLink && (
-              <a
-                href={project.githubLink}
-                target="_blank"
-                rel="noopener noreferrer"
-                data-cursor="pointer"
-                className="inline-flex items-center gap-2 px-6 py-3 border border-dark-border hover:border-text-dim text-text font-semibold rounded-full transition-colors"
-              >
-                <Github size={16} /> Source Code
-              </a>
-            )}
           </div>
 
           {/* Hero image */}
