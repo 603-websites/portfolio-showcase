@@ -35,7 +35,7 @@ export default function Home() {
   return (
     <main>
       {/* Hero + Featured Projects — all in one viewport */}
-      <section className="relative h-screen flex flex-col pt-16 overflow-hidden">
+      <section className="relative h-screen flex flex-col pt-16">
         {/* Top: centered hero content */}
         <div className="relative max-w-7xl mx-auto px-6 pt-4 md:pt-6 pb-2 md:pb-3 flex-shrink-0 text-center">
           <h1 className="text-2xl md:text-4xl lg:text-5xl font-extrabold leading-[1.15] tracking-tight">
@@ -46,7 +46,13 @@ export default function Home() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.4, duration: 0.5 }}
-              className="inline bg-gradient-to-r from-accent to-violet bg-clip-text text-transparent"
+              className="inline"
+              style={{
+                background: 'linear-gradient(to right, #3b82f6, #8b5cf6)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                backgroundClip: 'text',
+              }}
             >
               Websites
             </motion.span>
