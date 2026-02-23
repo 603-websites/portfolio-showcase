@@ -114,12 +114,11 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Smooth transition gradient */}
-      <div className="h-24 md:h-32 bg-gradient-to-b from-transparent to-dark-light" />
-
       {/* How It Works */}
-      <section className="pt-0 pb-16 md:py-24 bg-dark-light">
-        <div className="max-w-7xl mx-auto px-6">
+      <section className="pb-16 md:py-24 bg-dark-light relative">
+        {/* Gradient overlay for smooth transition from hero */}
+        <div className="absolute inset-x-0 -top-20 h-20 bg-gradient-to-b from-transparent to-dark-light pointer-events-none" />
+        <div className="pt-10 md:pt-0 max-w-7xl mx-auto px-6">
           <SectionReveal>
             <TextReveal as="h2" className="text-2xl md:text-5xl font-extrabold text-center mb-2 md:mb-4">
               How It Works
@@ -174,17 +173,19 @@ export default function Home() {
       </section>
 
       {/* Why Us */}
-      <section className="py-24">
+      <section className="py-16 md:py-24">
         <div className="max-w-7xl mx-auto px-6">
           <SectionReveal>
-            <TextReveal as="h2" className="text-3xl md:text-5xl font-extrabold text-center mb-4">
+            <TextReveal as="h2" className="text-2xl md:text-5xl font-extrabold text-center mb-3 md:mb-4">
               Why Work With Us
             </TextReveal>
-            <p className="text-text-muted text-center mb-16 max-w-xl mx-auto">
+            <p className="text-text-muted text-center mb-8 md:mb-16 max-w-xl mx-auto text-sm md:text-base">
               We're not an agency. We're two developers who build websites we're proud of.
             </p>
           </SectionReveal>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+          {/* Desktop: full cards with descriptions */}
+          <div className="hidden md:grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {whyUs.map((item, i) => (
               <SectionReveal key={i} delay={i * 0.08}>
                 <div className="flex gap-4 p-6 rounded-xl border border-dark-border bg-dark-light hover:border-accent/30 transition-colors">
@@ -197,6 +198,18 @@ export default function Home() {
               </SectionReveal>
             ))}
           </div>
+
+          {/* Mobile: compact list, titles only */}
+          <SectionReveal className="md:hidden">
+            <div className="space-y-2.5">
+              {whyUs.map((item, i) => (
+                <div key={i} className="flex items-center gap-3 px-4 py-3 rounded-xl border border-dark-border bg-dark-light">
+                  <CheckCircle size={16} className="text-accent shrink-0" />
+                  <h3 className="text-sm font-semibold text-text">{item.title}</h3>
+                </div>
+              ))}
+            </div>
+          </SectionReveal>
         </div>
       </section>
 

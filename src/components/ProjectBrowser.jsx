@@ -132,14 +132,14 @@ export default function ProjectBrowser({ projects }) {
       </div>
 
       {/* Dots indicator */}
-      <div className="flex justify-center gap-2 mt-2 md:mt-4">
+      <div className="flex justify-center gap-3 mt-3 md:mt-4">
         {projects.map((_, i) => (
           <button
             key={i}
             data-cursor="pointer"
             onClick={() => { setPaused(true); setPosIndex(projects.length + i) }}
-            className={`w-2 h-2 rounded-full transition-colors ${
-              i === displayIndex ? 'bg-accent' : 'bg-dark-border'
+            className={`w-2.5 h-2.5 rounded-full transition-all duration-300 ${
+              i === displayIndex ? 'bg-accent scale-110' : 'bg-dark-border'
             }`}
           />
         ))}
