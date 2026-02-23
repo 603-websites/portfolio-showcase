@@ -43,7 +43,7 @@ export default function Services() {
       </section>
 
       {/* Guarantees */}
-      <section className="py-24 bg-dark-light">
+      <section className="py-24">
         <div className="max-w-7xl mx-auto px-6">
           <SectionReveal>
             <TextReveal as="h2" className="text-3xl md:text-4xl font-extrabold text-center mb-16">
@@ -88,7 +88,7 @@ export default function Services() {
       </section>
 
       {/* CTA */}
-      <section className="py-24 bg-dark-light">
+      <section className="py-24">
         <div className="max-w-4xl mx-auto px-6 text-center">
           <SectionReveal>
             <h2 className="text-3xl md:text-4xl font-extrabold text-text mb-4">

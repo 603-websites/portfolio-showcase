@@ -58,7 +58,7 @@ export default function About() {
       </section>
 
       {/* Our Story */}
-      <section className="py-24 bg-dark-light">
+      <section className="py-24">
         <div className="max-w-3xl mx-auto px-6">
           <SectionReveal>
             <h2 className="text-2xl font-bold text-text mb-6">How We Started</h2>
@@ -102,7 +102,7 @@ export default function About() {
       </section>
 
       {/* CTA */}
-      <section className="py-24 bg-dark-light">
+      <section className="py-24">
         <div className="max-w-4xl mx-auto px-6 text-center">
           <SectionReveal>
             <h2 className="text-3xl md:text-4xl font-extrabold text-text mb-4">Work With Us</h2>

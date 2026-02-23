@@ -57,7 +57,7 @@ export default function ProjectDetail() {
       </section>
 
       {/* Overview + Metrics */}
-      <section className="py-24 bg-dark-light">
+      <section className="py-24">
         <div className="max-w-7xl mx-auto px-6">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
             <div className="lg:col-span-2">
@@ -92,7 +92,7 @@ export default function ProjectDetail() {
       </section>
 
       {/* Features */}
-      <section className="py-24 bg-dark-light">
+      <section className="py-24">
         <div className="max-w-7xl mx-auto px-6">
           <SectionReveal>
             <h2 className="text-2xl font-bold text-text mb-8">Key Features</h2>
@@ -136,7 +136,7 @@ export default function ProjectDetail() {
 
       {/* Lessons */}
       {project.lessons && project.lessons.length > 0 && (
-        <section className="py-24 bg-dark-light">
+        <section className="py-24">
           <div className="max-w-7xl mx-auto px-6">
             <SectionReveal>
               <h2 className="text-2xl font-bold text-text mb-8">What We Learned</h2>
@@ -164,7 +164,7 @@ export default function ProjectDetail() {
       </section>
 
       {/* CTA */}
-      <section className="py-24 bg-dark-light">
+      <section className="py-24">
         <div className="max-w-4xl mx-auto px-6 text-center">
           <SectionReveal>
             <h2 className="text-3xl md:text-4xl font-extrabold text-text mb-4">
