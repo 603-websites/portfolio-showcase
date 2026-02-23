@@ -114,19 +114,23 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Smooth transition gradient */}
+      <div className="h-24 md:h-32 bg-gradient-to-b from-transparent to-dark-light" />
+
       {/* How It Works */}
-      <section className="py-24 bg-dark-light">
+      <section className="pt-0 pb-16 md:py-24 bg-dark-light">
         <div className="max-w-7xl mx-auto px-6">
           <SectionReveal>
-            <TextReveal as="h2" className="text-3xl md:text-5xl font-extrabold text-center mb-4">
+            <TextReveal as="h2" className="text-2xl md:text-5xl font-extrabold text-center mb-2 md:mb-4">
               How It Works
             </TextReveal>
-            <p className="text-text-muted text-center mb-16 max-w-xl mx-auto">
+            <p className="text-text-muted text-center text-sm md:text-base mb-8 md:mb-16 max-w-xl mx-auto">
               From first conversation to live website in as little as 3 days.
             </p>
           </SectionReveal>
 
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+          {/* Desktop: 4 columns */}
+          <div className="hidden md:grid md:grid-cols-4 gap-8">
             {steps.map((s, i) => (
               <SectionReveal key={i} delay={i * 0.1}>
                 <div className="relative">
@@ -143,6 +147,29 @@ export default function Home() {
               </SectionReveal>
             ))}
           </div>
+
+          {/* Mobile: compact horizontal layout */}
+          <SectionReveal className="md:hidden">
+            <div className="space-y-4">
+              {steps.map((s, i) => (
+                <div key={i} className="flex items-start gap-3">
+                  <div className="flex flex-col items-center shrink-0">
+                    <div className="w-9 h-9 rounded-lg bg-accent/10 flex items-center justify-center">
+                      <s.icon size={18} className="text-accent" />
+                    </div>
+                    {i < steps.length - 1 && (
+                      <div className="w-px h-4 bg-dark-border mt-1" />
+                    )}
+                  </div>
+                  <div className="pt-0.5">
+                    <span className="text-[10px] font-bold text-accent uppercase tracking-wider">Step {s.step}</span>
+                    <h3 className="text-sm font-bold text-text leading-tight">{s.title}</h3>
+                    <p className="text-xs text-text-muted leading-relaxed mt-0.5">{s.desc}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </SectionReveal>
         </div>
       </section>
 
