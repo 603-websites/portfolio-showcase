@@ -117,16 +117,26 @@ export default function Home() {
       {/* How It Works */}
       <section className="pb-16 md:py-24 bg-dark-light relative">
         {/* Gradient overlay for smooth transition from hero */}
-        <div className="absolute inset-x-0 -top-20 h-20 bg-gradient-to-b from-transparent to-dark-light pointer-events-none" />
+        <div className="absolute inset-x-0 -top-24 h-24 bg-gradient-to-b from-transparent to-dark-light pointer-events-none" />
         <div className="pt-10 md:pt-0 max-w-7xl mx-auto px-6">
-          <SectionReveal>
-            <TextReveal as="h2" className="text-2xl md:text-5xl font-extrabold text-center mb-2 md:mb-4">
-              How It Works
-            </TextReveal>
-            <p className="text-text-muted text-center text-sm md:text-base mb-8 md:mb-16 max-w-xl mx-auto">
+          {/* Mobile heading: no animation, just static */}
+          <div className="md:hidden">
+            <h2 className="text-2xl font-extrabold text-center mb-2">How It Works</h2>
+            <p className="text-text-muted text-center text-sm mb-8 max-w-xl mx-auto">
               From first conversation to live website in as little as 3 days.
             </p>
-          </SectionReveal>
+          </div>
+          {/* Desktop heading: animated */}
+          <div className="hidden md:block">
+            <SectionReveal>
+              <TextReveal as="h2" className="text-5xl font-extrabold text-center mb-4">
+                How It Works
+              </TextReveal>
+              <p className="text-text-muted text-center mb-16 max-w-xl mx-auto">
+                From first conversation to live website in as little as 3 days.
+              </p>
+            </SectionReveal>
+          </div>
 
           {/* Desktop: 4 columns */}
           <div className="hidden md:grid md:grid-cols-4 gap-8">
@@ -147,28 +157,26 @@ export default function Home() {
             ))}
           </div>
 
-          {/* Mobile: compact horizontal layout */}
-          <SectionReveal className="md:hidden">
-            <div className="space-y-4">
-              {steps.map((s, i) => (
-                <div key={i} className="flex items-start gap-3">
-                  <div className="flex flex-col items-center shrink-0">
-                    <div className="w-9 h-9 rounded-lg bg-accent/10 flex items-center justify-center">
-                      <s.icon size={18} className="text-accent" />
-                    </div>
-                    {i < steps.length - 1 && (
-                      <div className="w-px h-4 bg-dark-border mt-1" />
-                    )}
+          {/* Mobile: compact layout, no scroll animation */}
+          <div className="md:hidden space-y-4">
+            {steps.map((s, i) => (
+              <div key={i} className="flex items-start gap-3">
+                <div className="flex flex-col items-center shrink-0">
+                  <div className="w-9 h-9 rounded-lg bg-accent/10 flex items-center justify-center">
+                    <s.icon size={18} className="text-accent" />
                   </div>
-                  <div className="pt-0.5">
-                    <span className="text-[10px] font-bold text-accent uppercase tracking-wider">Step {s.step}</span>
-                    <h3 className="text-sm font-bold text-text leading-tight">{s.title}</h3>
-                    <p className="text-xs text-text-muted leading-relaxed mt-0.5">{s.desc}</p>
-                  </div>
+                  {i < steps.length - 1 && (
+                    <div className="w-px h-4 bg-dark-border mt-1" />
+                  )}
                 </div>
-              ))}
-            </div>
-          </SectionReveal>
+                <div className="pt-0.5">
+                  <span className="text-[10px] font-bold text-accent uppercase tracking-wider">Step {s.step}</span>
+                  <h3 className="text-sm font-bold text-text leading-tight">{s.title}</h3>
+                  <p className="text-xs text-text-muted leading-relaxed mt-0.5">{s.desc}</p>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
