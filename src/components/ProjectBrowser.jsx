@@ -1,5 +1,4 @@
 import { useRef, useState, useEffect, useCallback } from 'react'
-import { motion } from 'framer-motion'
 import { useNavigate } from 'react-router-dom'
 
 export default function ProjectBrowser({ projects }) {
@@ -8,7 +7,12 @@ export default function ProjectBrowser({ projects }) {
   const [posIndex, setPosIndex] = useState(projects.length) // start in middle copy
   const [paused, setPaused] = useState(false)
   const [animate, setAnimate] = useState(true)
-  const isMobile = typeof window !== 'undefined' && window.innerWidth < 768
+  const [isMobile, setIsMobile] = useState(false)
+
+  useEffect(() => {
+    setIsMobile(window.innerWidth < 768)
+  }, [])
+
   const cardWidth = isMobile ? 260 : 323
   const gap = isMobile ? 16 : 22
   const stride = cardWidth + gap
@@ -31,7 +35,6 @@ export default function ProjectBrowser({ projects }) {
   // Re-enable animation after a silent snap
   useEffect(() => {
     if (!animate) {
-      // Force a reflow then re-enable
       requestAnimationFrame(() => {
         requestAnimationFrame(() => {
           setAnimate(true)
@@ -39,6 +42,25 @@ export default function ProjectBrowser({ projects }) {
       })
     }
   }, [animate])
+
+  // Pause when tab is hidden, reset cleanly when visible
+  useEffect(() => {
+    const handleVisibility = () => {
+      if (document.hidden) {
+        setPaused(true)
+      } else {
+        // Reset to a safe middle position to prevent drift
+        setPosIndex((prev) => {
+          const display = ((prev % projects.length) + projects.length) % projects.length
+          return projects.length + display
+        })
+        setAnimate(true)
+        setPaused(false)
+      }
+    }
+    document.addEventListener('visibilitychange', handleVisibility)
+    return () => document.removeEventListener('visibilitychange', handleVisibility)
+  }, [projects.length])
 
   // Auto-advance
   useEffect(() => {
@@ -74,8 +96,9 @@ export default function ProjectBrowser({ projects }) {
       onMouseLeave={() => setPaused(false)}
     >
       <div
-        className="flex gap-6"
+        className="flex"
         style={{
+          gap: `${gap}px`,
           transform: `translateX(${translateX}px)`,
           transition: animate ? 'transform 0.5s cubic-bezier(0.25, 0.4, 0.25, 1)' : 'none',
         }}

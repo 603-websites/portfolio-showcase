@@ -35,27 +35,18 @@ export default function Home() {
   return (
     <main>
       {/* Hero + Featured Projects — all in one viewport */}
-      <section className="relative h-screen flex flex-col pt-16">
+      <section className="relative min-h-screen flex flex-col pt-16 overflow-x-hidden">
         {/* Top: centered hero content */}
         <div className="relative max-w-7xl mx-auto px-6 pt-4 md:pt-6 pb-2 md:pb-3 flex-shrink-0 text-center">
           <h1 className="text-2xl md:text-4xl lg:text-5xl font-extrabold leading-[1.15] tracking-tight">
             <TextReveal as="span" className="inline">
               We Make Portfolio & Business
             </TextReveal>{' '}
-            <motion.span
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.4, duration: 0.5 }}
-              className="inline"
-              style={{
-                background: 'linear-gradient(to right, #3b82f6, #8b5cf6)',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                backgroundClip: 'text',
-              }}
+            <span
+              className="inline text-accent"
             >
               Websites
-            </motion.span>
+            </span>
           </h1>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
