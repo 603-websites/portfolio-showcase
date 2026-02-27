@@ -35,7 +35,7 @@ export const projects = [
       "Automated confirmations cut no-shows by over 40%"
     ],
     liveLink: "https://elite-detailing-website.vercel.app",
-    githubLink: "https://github.com/louissader/elite-car-detailing-website",
+    githubLink: "https://github.com/sader-carter-web/elite-car-detailing",
     launchDate: "November 2025",
     buildTime: "4 weeks",
     team: "Louis Sader",
@@ -78,7 +78,7 @@ export const projects = [
       "Fast-loading sites keep visitors engaged longer"
     ],
     liveLink: "https://louissader.vercel.app",
-    githubLink: "https://github.com/louissader/louissader.dev",
+    githubLink: "https://github.com/sader-carter-web/louis-sader",
     launchDate: "October 2025",
     buildTime: "2 weeks",
     team: "Louis Sader",
@@ -164,7 +164,7 @@ export const projects = [
       "Optimized images are essential for fast page loads"
     ],
     liveLink: "https://logan-carter-portfolio.vercel.app",
-    githubLink: "https://github.com/Logan566C/logan-carter-portfolio",
+    githubLink: "https://github.com/sader-carter-web/logan-carter",
     launchDate: "January 2026",
     buildTime: "3 weeks",
     team: "Louis Sader & Logan Carter",
