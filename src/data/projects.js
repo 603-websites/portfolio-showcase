@@ -87,6 +87,49 @@ export const projects = [
     gallery: ["/images/projects/louissader-dev-1.jpg", "/images/projects/louissader-dev-2.jpg"]
   },
   {
+    id: 5,
+    title: "Trey Gonzalez Portfolio",
+    slug: "trey-gonzalez",
+    tagline: "Professional portfolio for a Tax Associate",
+    category: "Portfolio",
+    description: "Portfolio website for Trey Gonzalez, a Tax Associate at PKF O'Connor Davies. Clean, professional design that highlights his career, skills, and experience.",
+    problem: "Tax professionals need a polished online presence to stand out in a competitive field and showcase their expertise to potential employers and clients.",
+    solution: "We built a sleek, professional portfolio tailored to Trey's background — clean typography, fast loading, and fully responsive design that makes a strong first impression.",
+    techStack: ["React 19", "Tailwind CSS 3", "Vite 7", "Framer Motion", "Lucide React", "Vercel"],
+    features: [
+      "Clean, professional design tailored to finance/accounting",
+      "Fully responsive — works on any device",
+      "Fast-loading with optimized performance",
+      "Experience and skills showcase",
+      "Smooth animations throughout",
+      "Optimized for Google search"
+    ],
+    metrics: [
+      { label: "Speed", value: "90+", description: "Google speed score" },
+      { label: "Load Time", value: "<1.5s", description: "Opens fast" },
+      { label: "Mobile", value: "100%", description: "Fully responsive" },
+      { label: "SEO", value: "90+", description: "Search optimized" }
+    ],
+    results: [
+      "Professional online presence for finance career",
+      "Fast-loading site with 90+ Google speed score",
+      "Fully responsive across all devices",
+      "Clean design that impresses recruiters and clients"
+    ],
+    lessons: [
+      "Professional industries benefit from clean, restrained design over flashy effects",
+      "Fast load times are critical for first impressions in professional portfolios"
+    ],
+    liveLink: "https://trey-gonzalez-portfolio.vercel.app",
+    githubLink: "https://github.com/Logan566C/trey-gonzalez-portfolio",
+    launchDate: "February 2026",
+    buildTime: "2 weeks",
+    team: "Louis Sader & Logan Carter",
+    status: "Live",
+    image: "/images/projects/trey-gonzalez.jpg",
+    gallery: ["/images/projects/trey-gonzalez-1.jpg", "/images/projects/trey-gonzalez-2.jpg"]
+  },
+  {
     id: 3,
     title: "Logan Carter Portfolio",
     slug: "logan-carter",
@@ -171,48 +214,5 @@ export const projects = [
     status: "Live",
     image: "/images/projects/aidan-carter.jpg",
     gallery: ["/images/projects/aidan-carter-1.jpg", "/images/projects/aidan-carter-2.jpg"]
-  },
-  {
-    id: 5,
-    title: "Trey Gonzalez Portfolio",
-    slug: "trey-gonzalez",
-    tagline: "Professional portfolio for a Tax Associate",
-    category: "Portfolio",
-    description: "Portfolio website for Trey Gonzalez, a Tax Associate at PKF O'Connor Davies. Clean, professional design that highlights his career, skills, and experience.",
-    problem: "Tax professionals need a polished online presence to stand out in a competitive field and showcase their expertise to potential employers and clients.",
-    solution: "We built a sleek, professional portfolio tailored to Trey's background — clean typography, fast loading, and fully responsive design that makes a strong first impression.",
-    techStack: ["React 19", "Tailwind CSS 3", "Vite 7", "Framer Motion", "Lucide React", "Vercel"],
-    features: [
-      "Clean, professional design tailored to finance/accounting",
-      "Fully responsive — works on any device",
-      "Fast-loading with optimized performance",
-      "Experience and skills showcase",
-      "Smooth animations throughout",
-      "Optimized for Google search"
-    ],
-    metrics: [
-      { label: "Speed", value: "90+", description: "Google speed score" },
-      { label: "Load Time", value: "<1.5s", description: "Opens fast" },
-      { label: "Mobile", value: "100%", description: "Fully responsive" },
-      { label: "SEO", value: "90+", description: "Search optimized" }
-    ],
-    results: [
-      "Professional online presence for finance career",
-      "Fast-loading site with 90+ Google speed score",
-      "Fully responsive across all devices",
-      "Clean design that impresses recruiters and clients"
-    ],
-    lessons: [
-      "Professional industries benefit from clean, restrained design over flashy effects",
-      "Fast load times are critical for first impressions in professional portfolios"
-    ],
-    liveLink: "https://trey-gonzalez-portfolio.vercel.app",
-    githubLink: "https://github.com/Logan566C/trey-gonzalez-portfolio",
-    launchDate: "February 2026",
-    buildTime: "2 weeks",
-    team: "Louis Sader & Logan Carter",
-    status: "Live",
-    image: "/images/projects/trey-gonzalez.jpg",
-    gallery: ["/images/projects/trey-gonzalez-1.jpg", "/images/projects/trey-gonzalez-2.jpg"]
   }
 ]

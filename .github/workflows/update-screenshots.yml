@@ -1,0 +1,67 @@
+name: Update Project Screenshots
+
+on:
+  schedule:
+    - cron: '0 6 * * 1'  # Every Monday at 6am UTC
+  workflow_dispatch:       # Also allows manual trigger from GitHub Actions tab
+
+jobs:
+  screenshot:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Install Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install Playwright
+        run: |
+          npm install playwright
+          npx playwright install chromium --with-deps
+
+      - name: Take screenshots
+        run: |
+          node -e "
+          const { chromium } = require('playwright');
+          const path = require('path');
+          const fs = require('fs');
+
+          const sites = [
+            { slug: 'car-detailing',  url: 'https://elite-detailing-website.vercel.app' },
+            { slug: 'louissader-dev', url: 'https://louissader.vercel.app' },
+            { slug: 'trey-gonzalez',  url: 'https://trey-gonzalez-portfolio.vercel.app' },
+            { slug: 'logan-carter',   url: 'https://logan-carter-portfolio.vercel.app' },
+            { slug: 'aidan-carter',   url: 'https://aidan-carter-portfolio.vercel.app' },
+          ];
+
+          (async () => {
+            const browser = await chromium.launch();
+            const page = await browser.newPage();
+            await page.setViewportSize({ width: 1280, height: 800 });
+
+            for (const site of sites) {
+              try {
+                await page.goto(site.url, { waitUntil: 'networkidle', timeout: 30000 });
+                await page.waitForTimeout(2000);
+                const outPath = path.join('public/images/projects', site.slug + '.jpg');
+                await page.screenshot({ path: outPath, type: 'jpeg', quality: 85 });
+                console.log('✅ ' + site.slug);
+              } catch (e) {
+                console.log('❌ ' + site.slug + ': ' + e.message);
+              }
+            }
+
+            await browser.close();
+          })();
+          "
+
+      - name: Commit updated screenshots
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add public/images/projects/*.jpg
+          git diff --cached --quiet || git commit -m "chore: auto-update project screenshots [skip ci]"
+          git push
