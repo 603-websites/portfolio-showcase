@@ -9,7 +9,7 @@ import { projects } from '../data/projects'
 import { homeFaq } from '../data/faq'
 
 const stats = [
-  { icon: Zap, value: '4+', label: 'Projects Delivered' },
+  { icon: Zap, value: '5+', label: 'Projects Delivered' },
   { icon: Clock, value: '3 Days', label: 'Avg. Delivery' },
   { icon: Star, value: '100%', label: 'Client Satisfaction' },
   { icon: Shield, value: '1 Year', label: 'Free Support' },
