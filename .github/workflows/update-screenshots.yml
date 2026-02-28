@@ -2,7 +2,7 @@ name: Update Project Screenshots
 
 on:
   schedule:
-    - cron: '0 6 * * 1'  # Every Monday at 6am UTC
+    - cron: '0 6 * * 1,3,5'  # Mon, Wed, Fri at 6am UTC
   workflow_dispatch:       # Also allows manual trigger from GitHub Actions tab
 
 permissions:
