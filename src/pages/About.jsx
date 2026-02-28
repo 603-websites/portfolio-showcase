@@ -28,9 +28,9 @@ const team = [
 export default function About() {
   return (
     <main className="pt-24 pb-24">
-      {/* Hero */}
-      <section className="max-w-7xl mx-auto px-6 mb-16">
-        <SectionReveal>
+      <div className="max-w-7xl mx-auto px-6">
+        {/* Hero */}
+        <SectionReveal className="mb-16">
           <TextReveal as="h1" className="text-4xl md:text-6xl font-extrabold mb-4">
             Meet the Team
           </TextReveal>
@@ -38,11 +38,9 @@ export default function About() {
             Two builders who ship fast and care about the details.
           </p>
         </SectionReveal>
-      </section>
 
-      {/* Team + CTA — one section */}
-      <section className="max-w-7xl mx-auto px-6">
-        <div className="grid grid-cols-2 gap-4 md:gap-8 mb-16">
+        {/* Team cards */}
+        <div className="grid grid-cols-2 gap-4 md:gap-8 mb-8">
           {team.map((member, i) => (
             <SectionReveal key={i} delay={i * 0.1}>
               <TeamCard {...member} compact />
@@ -50,16 +48,17 @@ export default function About() {
           ))}
         </div>
 
+        {/* CTA — anchored card that connects to the cards above */}
         <SectionReveal>
-          <div className="text-center">
-            <h2 className="text-3xl md:text-4xl font-extrabold text-text mb-4">Work With Us</h2>
-            <p className="text-text-muted mb-8 text-lg">Let's build something great together.</p>
+          <div className="border border-dark-border rounded-2xl p-10 text-center">
+            <h2 className="text-2xl md:text-3xl font-extrabold text-text mb-3">Work With Us</h2>
+            <p className="text-text-muted mb-6">Let's build something great together.</p>
             <Link to="/contact" data-cursor="pointer" className="inline-flex items-center gap-2 px-8 py-4 bg-accent hover:bg-accent-hover text-white font-semibold rounded-full transition-colors">
               Get in Touch <ArrowRight size={18} />
             </Link>
           </div>
         </SectionReveal>
-      </section>
+      </div>
     </main>
   )
 }
