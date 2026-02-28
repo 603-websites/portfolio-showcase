@@ -35,7 +35,7 @@ export const projects = [
       "Automated confirmations cut no-shows by over 40%"
     ],
     liveLink: "https://elite-detailing-website.vercel.app",
-    githubLink: "https://github.com/sader-carter-web/elite-car-detailing",
+    githubLink: "https://github.com/603-websites/elite-car-detailing",
     launchDate: "November 2025",
     buildTime: "4 weeks",
     team: "Louis Sader",
@@ -78,7 +78,7 @@ export const projects = [
       "Fast-loading sites keep visitors engaged longer"
     ],
     liveLink: "https://louissader.vercel.app",
-    githubLink: "https://github.com/sader-carter-web/portfolio-louis-sader",
+    githubLink: "https://github.com/603-websites/portfolio-louis-sader",
     launchDate: "October 2025",
     buildTime: "2 weeks",
     team: "Louis Sader",
@@ -121,7 +121,7 @@ export const projects = [
       "Fast load times are critical for first impressions in professional portfolios"
     ],
     liveLink: "https://trey-gonzalez-portfolio.vercel.app",
-    githubLink: "https://github.com/sader-carter-web/portfolio-trey-gonzalez",
+    githubLink: "https://github.com/603-websites/portfolio-trey-gonzalez",
     launchDate: "February 2026",
     buildTime: "2 weeks",
     team: "Louis Sader & Logan Carter",
@@ -164,7 +164,7 @@ export const projects = [
       "Optimized images are essential for fast page loads"
     ],
     liveLink: "https://logan-carter-portfolio.vercel.app",
-    githubLink: "https://github.com/sader-carter-web/portfolio-logan-carter",
+    githubLink: "https://github.com/603-websites/portfolio-logan-carter",
     launchDate: "January 2026",
     buildTime: "3 weeks",
     team: "Louis Sader & Logan Carter",
@@ -207,7 +207,7 @@ export const projects = [
       "Consistent design across related sites builds a cohesive brand"
     ],
     liveLink: "https://aidan-carter-portfolio.vercel.app",
-    githubLink: "https://github.com/sader-carter-web/portfolio-aidan-carter",
+    githubLink: "https://github.com/603-websites/portfolio-aidan-carter",
     launchDate: "January 2026",
     buildTime: "2 weeks",
     team: "Louis Sader & Logan Carter",
