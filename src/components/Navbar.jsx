@@ -52,7 +52,7 @@ export default function Navbar() {
             </NavLink>
           ))}
           <NavLink
-            to="/contact"
+            to="/order"
             data-cursor="pointer"
             className="text-sm font-semibold px-5 py-2 rounded-full bg-accent hover:bg-accent-hover transition-colors text-white"
           >

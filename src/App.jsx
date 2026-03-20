@@ -10,6 +10,8 @@ import ProjectDetail from './pages/ProjectDetail'
 import About from './pages/About'
 import Services from './pages/Services'
 import Contact from './pages/Contact'
+import Order from './pages/Order'
+import OrderSuccess from './pages/OrderSuccess'
 import Privacy from './pages/Privacy'
 import Terms from './pages/Terms'
 import NotFound from './pages/NotFound'
@@ -29,6 +31,8 @@ function App() {
           <Route path="/about" element={<PageTransition><About /></PageTransition>} />
           <Route path="/services" element={<PageTransition><Services /></PageTransition>} />
           <Route path="/contact" element={<PageTransition><Contact /></PageTransition>} />
+          <Route path="/order" element={<PageTransition><Order /></PageTransition>} />
+          <Route path="/order/success" element={<PageTransition><OrderSuccess /></PageTransition>} />
           <Route path="/privacy" element={<PageTransition><Privacy /></PageTransition>} />
           <Route path="/terms" element={<PageTransition><Terms /></PageTransition>} />
           <Route path="*" element={<PageTransition><NotFound /></PageTransition>} />
