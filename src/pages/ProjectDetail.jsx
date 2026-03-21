@@ -17,7 +17,7 @@ export default function ProjectDetail() {
       <section className="relative py-24 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-b from-accent/5 to-transparent" />
         <div className="relative max-w-7xl mx-auto px-6">
-          <Link to="/projects" data-cursor="pointer" className="inline-flex items-center gap-2 text-sm text-text-muted hover:text-text mb-8 transition-colors">
+          <Link to="/projects" className="inline-flex items-center gap-2 text-sm text-text-muted hover:text-text mb-8 transition-colors">
             <ArrowLeft size={16} /> Back to Projects
           </Link>
 
@@ -42,7 +42,6 @@ export default function ProjectDetail() {
               href={project.liveLink}
               target="_blank"
               rel="noopener noreferrer"
-              data-cursor="pointer"
               className="inline-flex items-center gap-2 px-6 py-3 bg-accent hover:bg-accent-hover text-white font-semibold rounded-full transition-colors"
             >
               View Live <ExternalLink size={16} />
@@ -172,10 +171,10 @@ export default function ProjectDetail() {
             </h2>
             <p className="text-text-muted mb-8">Let's talk about your vision and make it real.</p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-              <Link to="/contact" data-cursor="pointer" className="px-8 py-4 bg-accent hover:bg-accent-hover text-white font-semibold rounded-full transition-colors">
+              <Link to="/contact" className="px-8 py-4 bg-accent hover:bg-accent-hover text-white font-semibold rounded-full transition-colors">
                 Get in Touch
               </Link>
-              <Link to="/projects" data-cursor="pointer" className="px-8 py-4 border border-dark-border hover:border-text-dim text-text font-semibold rounded-full transition-colors">
+              <Link to="/projects" className="px-8 py-4 border border-dark-border hover:border-text-dim text-text font-semibold rounded-full transition-colors">
                 View More Projects
               </Link>
             </div>

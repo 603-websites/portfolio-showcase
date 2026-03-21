@@ -35,7 +35,6 @@ export default function Projects() {
             {filters.map(f => (
               <button
                 key={f}
-                data-cursor="pointer"
                 onClick={() => setActiveFilter(f)}
                 className={`px-5 py-2 rounded-full text-sm font-medium transition-colors ${
                   activeFilter === f

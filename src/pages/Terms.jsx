@@ -59,7 +59,7 @@ export default function Terms() {
 
             <section>
               <h2 className="text-xl font-bold text-text mb-3">8. Contact</h2>
-              <p>Questions about these terms? Contact us at <a href="mailto:louissader42@gmail.com" className="text-accent hover:text-accent-hover transition-colors" data-cursor="pointer">louissader42@gmail.com</a>.</p>
+              <p>Questions about these terms? Contact us at <a href="mailto:louissader42@gmail.com" className="text-accent hover:text-accent-hover transition-colors">louissader42@gmail.com</a>.</p>
             </section>
           </div>
         </SectionReveal>

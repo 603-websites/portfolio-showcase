@@ -73,7 +73,7 @@ export default function Privacy() {
 
             <section>
               <h2 className="text-xl font-bold text-text mb-3">7. Contact</h2>
-              <p>For privacy-related questions, contact us at <a href="mailto:louissader42@gmail.com" className="text-accent hover:text-accent-hover transition-colors" data-cursor="pointer">louissader42@gmail.com</a>.</p>
+              <p>For privacy-related questions, contact us at <a href="mailto:louissader42@gmail.com" className="text-accent hover:text-accent-hover transition-colors">louissader42@gmail.com</a>.</p>
             </section>
           </div>
         </SectionReveal>

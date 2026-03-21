@@ -20,17 +20,17 @@ export default function TeamCard({ name, title, bio, skills, image, linkedin, gi
 
       <h3 className={`font-bold text-text text-center ${compact ? 'text-base md:text-xl' : 'text-xl'}`}>{name}</h3>
       <p className={`text-accent text-center mt-1 ${compact ? 'text-xs md:text-sm mb-2 md:mb-4' : 'text-sm mb-4'}`}>{title}</p>
-      <p className={`text-text-muted leading-relaxed text-center ${compact ? 'text-xs md:text-sm mb-3 md:mb-6 hidden md:block' : 'text-sm mb-6'}`}>{bio}</p>
+      <p className={`text-text-muted leading-relaxed text-center ${compact ? 'text-xs md:text-sm mb-3 md:mb-6' : 'text-sm mb-6'}`}>{bio}</p>
 
       {/* Social */}
       <div className="flex justify-center gap-4">
         {linkedin && (
-          <a href={linkedin} target="_blank" rel="noopener noreferrer" className="text-text-muted hover:text-accent transition-colors" data-cursor="pointer">
+          <a href={linkedin} target="_blank" rel="noopener noreferrer" className="text-text-muted hover:text-accent transition-colors">
             <Linkedin size={compact ? 16 : 20} />
           </a>
         )}
         {github && (
-          <a href={github} target="_blank" rel="noopener noreferrer" className="text-text-muted hover:text-accent transition-colors" data-cursor="pointer">
+          <a href={github} target="_blank" rel="noopener noreferrer" className="text-text-muted hover:text-accent transition-colors">
             <Github size={compact ? 16 : 20} />
           </a>
         )}

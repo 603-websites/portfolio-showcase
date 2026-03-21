@@ -12,7 +12,7 @@ export default function FAQAccordion({ items }) {
       {items.map((item, i) => (
         <div key={i} className="border border-dark-border rounded-xl overflow-hidden">
           <button
-            data-cursor="pointer"
+        
             onClick={() => toggle(i)}
             className="w-full flex items-center justify-between px-6 py-5 text-left hover:bg-dark-lighter transition-colors"
           >

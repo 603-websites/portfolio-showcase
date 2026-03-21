@@ -177,7 +177,6 @@ export default function Order() {
                   key={pkg.id}
                   type="button"
                   onClick={() => setSelectedPkg(pkg.id)}
-                  data-cursor="pointer"
                   className={`relative text-left p-6 rounded-2xl border transition-all duration-200 ${
                     selectedPkg === pkg.id
                       ? 'border-accent bg-accent/5'
@@ -289,7 +288,6 @@ export default function Order() {
               onDragLeave={() => setDragging(false)}
               onDrop={onDrop}
               onClick={() => fileInputRef.current?.click()}
-              data-cursor="pointer"
               className={`border-2 border-dashed rounded-2xl p-8 text-center cursor-pointer transition-colors ${
                 dragging ? 'border-accent bg-accent/5' : 'border-dark-border hover:border-accent/40'
               }`}
@@ -326,7 +324,6 @@ export default function Order() {
                     <button
                       type="button"
                       onClick={() => removeFile(i)}
-                      data-cursor="pointer"
                       className="text-text-dim hover:text-error transition-colors ml-4 shrink-0"
                     >
                       <X size={16} />
@@ -349,7 +346,6 @@ export default function Order() {
             <button
               type="submit"
               disabled={loading}
-              data-cursor="pointer"
               className="w-full flex items-center justify-center gap-2 py-4 rounded-2xl bg-accent hover:bg-accent-hover disabled:opacity-50 disabled:cursor-not-allowed transition-colors text-white font-semibold text-lg"
             >
               {loading ? (

@@ -34,7 +34,6 @@ export default function Services() {
           </p>
           <Link
             to="/contact"
-            data-cursor="pointer"
             className="inline-flex items-center gap-2 px-8 py-4 bg-accent hover:bg-accent-hover text-white font-semibold rounded-full transition-colors text-lg"
           >
             Get Your Free Quote <ArrowRight size={20} />
@@ -97,7 +96,7 @@ export default function Services() {
             <p className="text-text-muted mb-8 text-lg">
               Reach out for a free consultation and quote. No pressure, no commitments — just an honest conversation about what you need.
             </p>
-            <Link to="/contact" data-cursor="pointer" className="inline-flex items-center gap-2 px-8 py-4 bg-accent hover:bg-accent-hover text-white font-semibold rounded-full transition-colors">
+            <Link to="/contact" className="inline-flex items-center gap-2 px-8 py-4 bg-accent hover:bg-accent-hover text-white font-semibold rounded-full transition-colors">
               Get a Free Quote <ArrowRight size={18} />
             </Link>
           </SectionReveal>

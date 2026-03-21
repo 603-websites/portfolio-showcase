@@ -21,21 +21,3 @@ export const homeFaq = [
   }
 ]
 
-export const servicesFaq = [
-  {
-    question: "Do you offer payment plans?",
-    answer: "Yes, for larger projects we can arrange milestone-based payment plans. Typically we structure it as a deposit upfront, progress payment at midpoint, and final payment at launch."
-  },
-  {
-    question: "What's included in post-launch support?",
-    answer: "Our 1-year post-launch support includes fixes, updates, design adjustments, and answering questions about managing your site. We're with you for the long haul."
-  },
-  {
-    question: "Can you work with tools I already use?",
-    answer: "Yes. We can connect your website to payment processors, email services, scheduling tools, and other business software you're already using."
-  },
-  {
-    question: "What's your current availability?",
-    answer: "We typically take on 1-2 projects at a time to ensure quality and attention. Reach out to discuss your timeline and we'll let you know our current availability."
-  }
-]

@@ -29,7 +29,7 @@ export default function Navbar() {
     >
       <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
         {/* Logo */}
-        <NavLink to="/" data-cursor="pointer" className="text-xl font-extrabold">
+        <NavLink to="/" className="text-xl font-extrabold">
           <span className="bg-gradient-to-r from-accent to-violet bg-clip-text text-transparent">
             S&C
           </span>
@@ -41,7 +41,6 @@ export default function Navbar() {
             <NavLink
               key={link.to}
               to={link.to}
-              data-cursor="pointer"
               className={({ isActive }) =>
                 `text-sm font-medium transition-colors ${
                   isActive ? 'text-accent' : 'text-text-muted hover:text-text'
@@ -53,7 +52,6 @@ export default function Navbar() {
           ))}
           <NavLink
             to="/order"
-            data-cursor="pointer"
             className="text-sm font-semibold px-5 py-2 rounded-full bg-accent hover:bg-accent-hover transition-colors text-white"
           >
             Get Started
@@ -62,7 +60,6 @@ export default function Navbar() {
 
         {/* Mobile toggle */}
         <button
-          data-cursor="pointer"
           className="md:hidden text-text"
           onClick={() => setMobileOpen(!mobileOpen)}
         >

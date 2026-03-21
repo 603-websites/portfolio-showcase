@@ -21,14 +21,14 @@ export default function NotFound() {
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
           <Link
             to="/"
-            data-cursor="pointer"
+        
             className="inline-flex items-center gap-2 px-6 py-3 bg-accent hover:bg-accent-hover text-white font-semibold rounded-full transition-colors"
           >
             <ArrowLeft size={16} /> Back to Home
           </Link>
           <Link
             to="/projects"
-            data-cursor="pointer"
+        
             className="inline-flex items-center gap-2 px-6 py-3 border border-dark-border hover:border-text-dim text-text font-semibold rounded-full transition-colors"
           >
             View Projects

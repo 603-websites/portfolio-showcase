@@ -37,7 +37,7 @@ export default function Contact() {
                 <div>
                   <h3 className="text-lg font-bold text-text mb-4">Direct Contact</h3>
                   <div className="space-y-4">
-                    <a href="mailto:louissader42@gmail.com" data-cursor="pointer" className="flex items-center gap-3 text-text-muted hover:text-text transition-colors">
+                    <a href="mailto:louissader42@gmail.com" className="flex items-center gap-3 text-text-muted hover:text-text transition-colors">
                       <div className="w-10 h-10 rounded-lg bg-accent/10 flex items-center justify-center shrink-0">
                         <Mail size={18} className="text-accent" />
                       </div>
@@ -46,7 +46,7 @@ export default function Contact() {
                         <p className="text-sm text-text-muted">louissader42@gmail.com</p>
                       </div>
                     </a>
-                    <a href="tel:+16032757513" data-cursor="pointer" className="flex items-center gap-3 text-text-muted hover:text-text transition-colors">
+                    <a href="tel:+16032757513" className="flex items-center gap-3 text-text-muted hover:text-text transition-colors">
                       <div className="w-10 h-10 rounded-lg bg-accent/10 flex items-center justify-center shrink-0">
                         <Phone size={18} className="text-accent" />
                       </div>
@@ -82,10 +82,10 @@ export default function Contact() {
                     <div>
                       <p className="text-xs text-text-dim uppercase tracking-wider mb-2">Louis Sader</p>
                       <div className="flex gap-3">
-                        <a href="https://www.linkedin.com/in/louis-sader-a6a391287/" target="_blank" rel="noopener noreferrer" data-cursor="pointer" className="w-10 h-10 rounded-lg bg-dark-lighter border border-dark-border flex items-center justify-center text-text-muted hover:text-accent hover:border-accent/30 transition-colors">
+                        <a href="https://www.linkedin.com/in/louis-sader-a6a391287/" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-lg bg-dark-lighter border border-dark-border flex items-center justify-center text-text-muted hover:text-accent hover:border-accent/30 transition-colors">
                           <Linkedin size={18} />
                         </a>
-                        <a href="https://github.com/louissader" target="_blank" rel="noopener noreferrer" data-cursor="pointer" className="w-10 h-10 rounded-lg bg-dark-lighter border border-dark-border flex items-center justify-center text-text-muted hover:text-accent hover:border-accent/30 transition-colors">
+                        <a href="https://github.com/louissader" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-lg bg-dark-lighter border border-dark-border flex items-center justify-center text-text-muted hover:text-accent hover:border-accent/30 transition-colors">
                           <Github size={18} />
                         </a>
                       </div>
@@ -93,10 +93,10 @@ export default function Contact() {
                     <div>
                       <p className="text-xs text-text-dim uppercase tracking-wider mb-2">Logan Carter</p>
                       <div className="flex gap-3">
-                        <a href="https://www.linkedin.com/in/logan-carter-35h/" target="_blank" rel="noopener noreferrer" data-cursor="pointer" className="w-10 h-10 rounded-lg bg-dark-lighter border border-dark-border flex items-center justify-center text-text-muted hover:text-accent hover:border-accent/30 transition-colors">
+                        <a href="https://www.linkedin.com/in/logan-carter-35h/" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-lg bg-dark-lighter border border-dark-border flex items-center justify-center text-text-muted hover:text-accent hover:border-accent/30 transition-colors">
                           <Linkedin size={18} />
                         </a>
-                        <a href="https://github.com/Logan566C" target="_blank" rel="noopener noreferrer" data-cursor="pointer" className="w-10 h-10 rounded-lg bg-dark-lighter border border-dark-border flex items-center justify-center text-text-muted hover:text-accent hover:border-accent/30 transition-colors">
+                        <a href="https://github.com/Logan566C" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-lg bg-dark-lighter border border-dark-border flex items-center justify-center text-text-muted hover:text-accent hover:border-accent/30 transition-colors">
                           <Github size={18} />
                         </a>
                       </div>

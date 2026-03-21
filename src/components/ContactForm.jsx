@@ -60,7 +60,7 @@ export default function ContactForm() {
         <CheckCircle size={48} className="text-success mx-auto mb-4" />
         <h3 className="text-xl font-bold text-text mb-2">Thanks for reaching out!</h3>
         <p className="text-text-muted">We'll get back to you within 24 hours.</p>
-        <button onClick={() => setStatus('idle')} className="mt-6 text-sm text-accent hover:text-accent-hover transition-colors" data-cursor="pointer">
+        <button onClick={() => setStatus('idle')} className="mt-6 text-sm text-accent hover:text-accent-hover transition-colors">
           Send another message
         </button>
       </motion.div>
@@ -132,7 +132,7 @@ export default function ContactForm() {
         <label className="block text-sm font-medium text-text mb-2">Preferred Contact Method</label>
         <div className="flex gap-6">
           {contactMethods.map(m => (
-            <label key={m} className="flex items-center gap-2 text-sm text-text-muted" data-cursor="pointer">
+            <label key={m} className="flex items-center gap-2 text-sm text-text-muted">
               <input
                 type="radio" name="contactMethod" value={m}
                 checked={form.contactMethod === m}
@@ -167,15 +167,13 @@ export default function ContactForm() {
         <button
           type="submit"
           disabled={status === 'loading'}
-          data-cursor="pointer"
           className="flex items-center gap-2 px-8 py-3 bg-accent hover:bg-accent-hover disabled:opacity-50 text-white font-semibold rounded-lg transition-colors"
         >
           {status === 'loading' ? <><Loader2 size={16} className="animate-spin" /> Sending...</> : 'Send Message'}
         </button>
         <button
           type="button"
-          data-cursor="pointer"
-          onClick={() => {
+                   onClick={() => {
             setForm({ name: '', email: '', company: '', projectType: '', budgetRange: '', timeline: '', description: '', contactMethod: 'Email', phone: '' })
             setErrors({})
           }}

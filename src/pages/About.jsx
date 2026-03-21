@@ -53,7 +53,7 @@ export default function About() {
           <div className="border border-dark-border rounded-2xl p-10 text-center">
             <h2 className="text-2xl md:text-3xl font-extrabold text-text mb-3">Work With Us</h2>
             <p className="text-text-muted mb-6">Let's build something great together.</p>
-            <Link to="/contact" data-cursor="pointer" className="inline-flex items-center gap-2 px-8 py-4 bg-accent hover:bg-accent-hover text-white font-semibold rounded-full transition-colors">
+            <Link to="/contact" className="inline-flex items-center gap-2 px-8 py-4 bg-accent hover:bg-accent-hover text-white font-semibold rounded-full transition-colors">
               Get in Touch <ArrowRight size={18} />
             </Link>
           </div>

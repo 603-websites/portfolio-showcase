@@ -9,7 +9,10 @@ export default function ProjectBrowser({ projects }) {
   const [isMobile, setIsMobile] = useState(false)
 
   useEffect(() => {
-    setIsMobile(window.innerWidth < 768)
+    const check = () => setIsMobile(window.innerWidth < 768)
+    check()
+    window.addEventListener('resize', check)
+    return () => window.removeEventListener('resize', check)
   }, [])
 
   const cardWidth = isMobile ? 260 : 323
@@ -66,31 +69,29 @@ export default function ProjectBrowser({ projects }) {
     if (paused) return
     const timer = setInterval(() => {
       setPosIndex((prev) => prev + 1)
-    }, 1500)
+    }, 3500)
     return () => clearInterval(timer)
   }, [paused])
 
-  // Keyboard
-  useEffect(() => {
-    const handleKeyDown = (e) => {
-      if (e.key === 'ArrowRight') {
-        setPaused(true)
-        setPosIndex((prev) => prev + 1)
-      } else if (e.key === 'ArrowLeft') {
-        setPaused(true)
-        setPosIndex((prev) => prev - 1)
-      }
+  // Keyboard (scoped to container focus)
+  const handleKeyDown = (e) => {
+    if (e.key === 'ArrowRight') {
+      setPaused(true)
+      setPosIndex((prev) => prev + 1)
+    } else if (e.key === 'ArrowLeft') {
+      setPaused(true)
+      setPosIndex((prev) => prev - 1)
     }
-    window.addEventListener('keydown', handleKeyDown)
-    return () => window.removeEventListener('keydown', handleKeyDown)
-  }, [])
+  }
 
   const translateX = -(posIndex * stride)
 
   return (
     <div
       ref={containerRef}
-      className="overflow-hidden h-full"
+      className="overflow-hidden h-full outline-none"
+      tabIndex={0}
+      onKeyDown={handleKeyDown}
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
     >
@@ -108,7 +109,6 @@ export default function ProjectBrowser({ projects }) {
           return (
             <div
               key={`${project.id}-${i}`}
-              data-cursor="pointer"
               className="group shrink-0 rounded-2xl overflow-hidden border border-dark-border bg-dark-light cursor-pointer"
               style={{
                 width: cardWidth,

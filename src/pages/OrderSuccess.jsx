@@ -41,7 +41,7 @@ export default function OrderSuccess() {
 
           <Link
             to="/"
-            data-cursor="pointer"
+        
             className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-dark-light border border-dark-border text-text-muted hover:text-text hover:border-accent/30 transition-colors text-sm font-medium"
           >
             Back to home
