@@ -44,6 +44,18 @@ export default function SignupPage() {
     setLoading(true);
 
     try {
+      // Rate limit check
+      const rl = await fetch("/api/auth/rate-limit", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action: "signup" }),
+      });
+      if (rl.status === 429) {
+        const rlData = await rl.json();
+        setError(rlData.error || "Too many signup attempts. Please wait and try again.");
+        return;
+      }
+
       const supabase = createClient();
       const { error: signUpError } = await supabase.auth.signUp({
         email,
