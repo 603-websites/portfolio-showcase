@@ -10,7 +10,7 @@ import {
   Users,
 } from "lucide-react";
 
-export const metadata = { title: "Client Dashboard | 603 Websites" };
+export const metadata = { title: "Client Dashboard | Website Upgraders" };
 
 export default async function ClientDashboard() {
   const supabase = await createClient();

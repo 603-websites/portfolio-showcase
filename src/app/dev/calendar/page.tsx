@@ -1,7 +1,7 @@
 import { createClient } from "@/lib/supabase/server";
 import { Calendar, Clock, Video, User } from "lucide-react";
 
-export const metadata = { title: "Calendar | 603 Dev" };
+export const metadata = { title: "Calendar | Website Upgraders Dev" };
 
 export default async function CalendarPage() {
   const supabase = await createClient();

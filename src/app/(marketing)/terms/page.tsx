@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Terms of Service | 603 Websites",
+  title: "Terms of Service | Website Upgraders",
 };
 
 export default function TermsPage() {
@@ -17,7 +17,7 @@ export default function TermsPage() {
               Service Description
             </h2>
             <p>
-              603 Websites (&quot;Sader &amp; Carter Web Development&quot;)
+              Website Upgraders (&quot;Sader &amp; Carter Web Development&quot;)
               provides managed website design, development, hosting, and ongoing
               maintenance services through monthly subscription plans.
             </p>

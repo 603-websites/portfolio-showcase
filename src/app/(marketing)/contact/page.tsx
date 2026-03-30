@@ -4,8 +4,8 @@ import ContactForm from "@/components/marketing/ContactForm";
 import SectionReveal from "@/components/marketing/SectionReveal";
 
 export const metadata: Metadata = {
-  title: "Contact | 603 Websites",
-  description: "Get in touch with 603 Websites for your next web project.",
+  title: "Contact | Website Upgraders",
+  description: "Get in touch with Website Upgraders for your next web project.",
 };
 
 export default function ContactPage() {

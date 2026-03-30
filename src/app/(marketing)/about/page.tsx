@@ -5,9 +5,9 @@ import TeamCard from "@/components/marketing/TeamCard";
 import SectionReveal from "@/components/marketing/SectionReveal";
 
 export const metadata: Metadata = {
-  title: "About | 603 Websites",
+  title: "About | Website Upgraders",
   description:
-    "Meet the team behind 603 Websites. We build and manage professional websites for small businesses.",
+    "Meet the team behind Website Upgraders. We build and manage professional websites for small businesses.",
 };
 
 const team = [
@@ -28,9 +28,11 @@ const team = [
     githubUrl: "https://github.com/Logan566C",
   },
   {
-    name: "Michael",
-    title: "Developer",
-    bio: "Full-stack developer and new member of the 603 Websites team. Focused on building scalable web applications and CRM solutions.",
+    name: "Michael Sader",
+    title: "Co-Founder",
+    bio: "District Manager at ADP with expertise in sales, business development, and CRM solutions. High Point University graduate (Marketing, Minor in Sales). Brings real-world client acquisition and relationship management experience to the team.",
+    image: "/images/team/michael.jpg",
+    linkedinUrl: "https://linkedin.com/in/michael-sader/",
   },
 ];
 
@@ -43,12 +45,12 @@ export default function AboutPage() {
             <h1 className="text-4xl md:text-5xl font-bold mb-6">
               Meet the Team Behind{" "}
               <span className="bg-gradient-to-r from-accent to-violet bg-clip-text text-transparent">
-                603 Websites
+                Website Upgraders
               </span>
             </h1>
             <p className="text-text-muted text-lg">
               We&apos;re a small team of developers who believe every business
-              deserves a great website — without the enterprise price tag or the
+              deserves a great website without the enterprise price tag or the
               hassle of managing it yourself.
             </p>
           </div>

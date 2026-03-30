@@ -4,7 +4,7 @@ import { DollarSign, Users, SquareCheckBig, TrendingUp } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 import RevenueChart from "@/components/dev/RevenueChart";
 
-export const metadata: Metadata = { title: "Dev Dashboard | 603 Websites" };
+export const metadata: Metadata = { title: "Dev Dashboard | Website Upgraders" };
 
 export default async function DevDashboard() {
   const supabase = await createClient();

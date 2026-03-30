@@ -90,7 +90,7 @@ export default function SignupPage() {
         Create Your Account
       </h2>
       <p className="text-text-muted text-sm text-center mb-6">
-        Get started with 603 Websites
+        Get started with Website Upgraders
       </p>
 
       {/* Error */}

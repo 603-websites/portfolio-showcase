@@ -212,7 +212,7 @@ function OrderForm() {
             {loading ? (
               <Loader2 className="w-5 h-5 animate-spin" />
             ) : (
-              `Proceed to Checkout — $${selectedPlan.price}/mo`
+              `Proceed to Checkout: $${selectedPlan.price}/mo`
             )}
           </button>
         </form>

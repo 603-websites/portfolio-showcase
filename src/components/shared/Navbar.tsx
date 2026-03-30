@@ -38,7 +38,7 @@ export default function Navbar() {
           setRole(userRole);
         }
       } catch {
-        // Not authenticated — leave defaults
+        // Not authenticated: leave defaults
       }
     };
     checkAuth();

@@ -155,7 +155,7 @@ export const projects: Project[] = [
     ],
     lessons: [
       "Personal branding matters as much as technical content",
-      "Keep portfolios focused — quality over quantity",
+      "Keep portfolios focused: quality over quantity",
       "Fast iteration with client feedback leads to better outcomes",
     ],
   },
@@ -164,7 +164,7 @@ export const projects: Project[] = [
     slug: "logan-carter",
     title: "Logan Carter Portfolio",
     tagline: "An engineering student's portfolio showcasing technical projects and leadership.",
-    description: "A professional portfolio for an engineering student and co-founder of 603 Websites.",
+    description: "A professional portfolio for an engineering student and co-founder of Website Upgraders.",
     category: "Portfolio",
     image: "/images/projects/logan-carter.jpg",
     gallery: ["/images/projects/logan-carter.jpg"],
@@ -240,7 +240,7 @@ export const projects: Project[] = [
       "Demonstrates that simplicity is effective",
     ],
     lessons: [
-      "Less is more — minimal portfolios perform best",
+      "Less is more: minimal portfolios perform best",
       "Typography and spacing carry the design when visuals are minimal",
       "Deliver fast, iterate based on feedback",
     ],

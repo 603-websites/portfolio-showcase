@@ -49,7 +49,7 @@ const benefits = [
   },
   {
     icon: DollarSign,
-    title: "One flat monthly fee — no surprises",
+    title: "One flat monthly fee: no surprises",
     description:
       "Everything is included in your plan. No hidden costs, no hourly billing, no scope creep charges.",
   },
@@ -63,7 +63,7 @@ const benefits = [
     icon: RefreshCw,
     title: "Updates included every month",
     description:
-      "Need content changes? New pages? We handle it as part of your plan — just send us a message.",
+      "Need content changes? New pages? We handle it as part of your plan: just send us a message.",
   },
   {
     icon: Zap,

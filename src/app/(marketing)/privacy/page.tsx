@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Privacy Policy | 603 Websites",
+  title: "Privacy Policy | Website Upgraders",
 };
 
 export default function PrivacyPage() {
@@ -51,15 +51,15 @@ export default function PrivacyPage() {
             <p>We use the following third-party services:</p>
             <ul className="list-disc pl-6 space-y-2 mt-2">
               <li>
-                <strong className="text-text">Stripe</strong> — for payment
+                <strong className="text-text">Stripe</strong>: for payment
                 processing
               </li>
               <li>
-                <strong className="text-text">Supabase</strong> — for
+                <strong className="text-text">Supabase</strong>: for
                 authentication and data storage
               </li>
               <li>
-                <strong className="text-text">Vercel</strong> — for website
+                <strong className="text-text">Vercel</strong>: for website
                 hosting and deployment
               </li>
             </ul>

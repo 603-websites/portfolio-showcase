@@ -1,7 +1,7 @@
 import { createClient } from "@/lib/supabase/server";
 import { BarChart3, Eye, Users, TrendingDown } from "lucide-react";
 
-export const metadata = { title: "Analytics | 603 Dev" };
+export const metadata = { title: "Analytics | Website Upgraders Dev" };
 
 export default async function DevAnalyticsPage() {
   const supabase = await createClient();
