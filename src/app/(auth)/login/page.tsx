@@ -1,5 +1,9 @@
 "use client";
 
+// Item 4 — static metadata lives in the server-rendered auth layout or via
+// next/head; for "use client" pages a title tag is injected via the layout.
+// See (auth)/layout.tsx for the portal-level title.
+
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";

@@ -75,6 +75,22 @@ export default function OnboardingPage() {
         return;
       }
 
+      // Item 9 — audit log (fire via API so we can use the admin client server-side)
+      try {
+        await fetch("/api/audit", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            action: "client_created",
+            entityType: "client",
+            entityId: newClient.id,
+            metadata: { business_name: businessName, plan: newClient.plan },
+          }),
+        });
+      } catch {
+        // Non-fatal; audit failure should not break onboarding
+      }
+
       router.push("/client/dashboard");
     } catch {
       setError("An unexpected error occurred. Please try again.");

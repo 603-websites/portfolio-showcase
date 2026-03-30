@@ -2,8 +2,11 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { Plus, Search, X, Loader2 } from "lucide-react";
+import { AlertCircle, Plus, Search, Users, X, Loader2 } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
+import toast from "react-hot-toast";
+import { formatDate, formatCurrency } from "@/lib/format";
+import SessionExpiredModal from "@/components/shared/SessionExpiredModal";
 
 interface Client {
   id: string;
@@ -17,6 +20,7 @@ interface Client {
   website_url: string | null;
   next_billing_date: string | null;
   created_at: string;
+  deleted_at: string | null;
 }
 
 export default function ClientsPage() {
@@ -24,16 +28,41 @@ export default function ClientsPage() {
   const [search, setSearch] = useState("");
   const [showModal, setShowModal] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [sessionExpired, setSessionExpired] = useState(false);
 
   const supabase = createClient();
 
   const fetchClients = async () => {
-    const { data } = await supabase
-      .from("clients")
-      .select("*")
-      .order("created_at", { ascending: false });
-    setClients(data || []);
-    setLoading(false);
+    try {
+      const {
+        data: { user },
+        error: authError,
+      } = await supabase.auth.getUser();
+
+      if (authError || !user) {
+        setSessionExpired(true);
+        setLoading(false);
+        return;
+      }
+
+      const { data, error: fetchError } = await supabase
+        .from("clients")
+        .select("*")
+        // Item 12 — soft delete filter
+        .is("deleted_at", null)
+        .order("created_at", { ascending: false });
+
+      if (fetchError) {
+        setError(fetchError.message);
+      } else {
+        setClients(data || []);
+      }
+    } catch {
+      setError("An unexpected error occurred.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
@@ -41,6 +70,7 @@ export default function ClientsPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  // Item 14 — client-side filter
   const filtered = clients.filter(
     (c) =>
       c.name.toLowerCase().includes(search.toLowerCase()) ||
@@ -48,14 +78,34 @@ export default function ClientsPage() {
       c.email.toLowerCase().includes(search.toLowerCase())
   );
 
+  if (sessionExpired) return <SessionExpiredModal show />;
+
+  // Item 1 — error state
+  if (error) {
+    return (
+      <div className="flex flex-col items-center justify-center h-64 gap-4">
+        <AlertCircle className="w-10 h-10 text-error" />
+        <p className="text-text-muted">{error}</p>
+        <button
+          onClick={() => {
+            setError(null);
+            setLoading(true);
+            fetchClients();
+          }}
+          className="bg-accent hover:bg-accent-hover text-white rounded-lg px-4 py-2 text-sm font-medium transition"
+        >
+          Retry
+        </button>
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold">Clients</h1>
-          <p className="text-text-muted mt-1">
-            {clients.length} total clients
-          </p>
+          <p className="text-text-muted mt-1">{clients.length} total clients</p>
         </div>
         <button
           onClick={() => setShowModal(true)}
@@ -65,20 +115,21 @@ export default function ClientsPage() {
         </button>
       </div>
 
-      {/* Search */}
+      {/* Item 14 — search */}
       <div className="relative">
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-text-dim" />
         <input
           type="text"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          placeholder="Search clients..."
+          placeholder="Search by name, business, or email..."
           className="w-full bg-dark-light border border-dark-border rounded-lg pl-10 pr-4 py-2.5 text-text placeholder-text-dim focus:border-accent outline-none"
         />
       </div>
 
       {/* Table */}
       <div className="bg-dark-light border border-dark-border rounded-xl overflow-hidden">
+        {/* Item 7 — overflow-x-auto for mobile */}
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead>
@@ -105,15 +156,40 @@ export default function ClientsPage() {
             </thead>
             <tbody>
               {loading ? (
-                <tr>
-                  <td colSpan={6} className="p-8 text-center text-text-dim">
-                    <Loader2 className="w-5 h-5 animate-spin mx-auto" />
-                  </td>
-                </tr>
+                // Item 1 — skeleton rows
+                Array.from({ length: 4 }).map((_, i) => (
+                  <tr key={i} className="border-b border-dark-border animate-pulse">
+                    <td className="p-4">
+                      <div className="h-4 w-32 bg-dark-lighter rounded mb-1" />
+                      <div className="h-3 w-48 bg-dark-lighter rounded" />
+                    </td>
+                    <td className="p-4">
+                      <div className="h-5 w-16 bg-dark-lighter rounded-full" />
+                    </td>
+                    <td className="p-4">
+                      <div className="h-4 w-12 bg-dark-lighter rounded" />
+                    </td>
+                    <td className="p-4">
+                      <div className="h-4 w-16 bg-dark-lighter rounded" />
+                    </td>
+                    <td className="p-4">
+                      <div className="h-4 w-24 bg-dark-lighter rounded" />
+                    </td>
+                    <td className="p-4">
+                      <div className="h-4 w-10 bg-dark-lighter rounded" />
+                    </td>
+                  </tr>
+                ))
               ) : filtered.length === 0 ? (
+                // Item 1 — empty state
                 <tr>
-                  <td colSpan={6} className="p-8 text-center text-text-dim">
-                    No clients found
+                  <td colSpan={6} className="p-12 text-center">
+                    <Users className="w-10 h-10 text-text-dim mx-auto mb-3" />
+                    <p className="text-text-dim">
+                      {search
+                        ? "No clients match your search."
+                        : "No clients yet. Add your first client to get started."}
+                    </p>
                   </td>
                 </tr>
               ) : (
@@ -153,10 +229,14 @@ export default function ClientsPage() {
                       </span>
                     </td>
                     <td className="p-4 text-text">
+                      {/* Item 13 — formatCurrency */}
                       ${c.monthly_revenue || 0}/mo
                     </td>
                     <td className="p-4 text-text-muted text-sm">
-                      {c.next_billing_date || "—"}
+                      {/* Item 6 — formatDate */}
+                      {c.next_billing_date
+                        ? formatDate(c.next_billing_date)
+                        : "—"}
                     </td>
                     <td className="p-4">
                       <Link
@@ -181,6 +261,7 @@ export default function ClientsPage() {
           onAdded={() => {
             setShowModal(false);
             fetchClients();
+            toast.success("Client added successfully!");
           }}
         />
       )}
@@ -244,7 +325,9 @@ function AddClientModal({
         </div>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-sm text-text-muted mb-1">Name *</label>
+            <label className="block text-sm text-text-muted mb-1">
+              Name *
+            </label>
             <input
               value={form.name}
               onChange={(e) => setForm({ ...form, name: e.target.value })}
@@ -287,7 +370,9 @@ function AddClientModal({
               />
             </div>
             <div>
-              <label className="block text-sm text-text-muted mb-1">Plan</label>
+              <label className="block text-sm text-text-muted mb-1">
+                Plan
+              </label>
               <select
                 value={form.plan}
                 onChange={(e) => setForm({ ...form, plan: e.target.value })}
@@ -326,9 +411,7 @@ function AddClientModal({
               placeholder="https://..."
             />
           </div>
-          {error && (
-            <p className="text-error text-sm">{error}</p>
-          )}
+          {error && <p className="text-error text-sm">{error}</p>}
           <button
             type="submit"
             disabled={loading}

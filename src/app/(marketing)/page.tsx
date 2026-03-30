@@ -1,4 +1,10 @@
+import type { Metadata } from "next";
 import Link from "next/link";
+
+// Item 4
+export const metadata: Metadata = {
+  title: "603 Websites | Managed Website Subscriptions",
+};
 import {
   Wrench,
   Server,

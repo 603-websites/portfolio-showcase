@@ -5,9 +5,9 @@ import TeamCard from "@/components/marketing/TeamCard";
 import SectionReveal from "@/components/marketing/SectionReveal";
 
 export const metadata: Metadata = {
-  title: "About | Website Upgraders",
+  title: "About — 603 Websites",
   description:
-    "Meet the team behind Website Upgraders. We build and manage professional websites for small businesses.",
+    "Meet the team behind 603 Websites. We build and manage professional websites for small businesses.",
 };
 
 const team = [

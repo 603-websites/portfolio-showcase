@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import Stripe from "stripe";
+import { withTimeout, TimeoutError } from "@/lib/fetch";
 
 const PRICES: Record<string, number> = {
   starter: 10000,
@@ -37,31 +38,49 @@ export async function POST(request: Request) {
     }
 
     const origin =
-      process.env.NEXT_PUBLIC_SITE_URL || "https://websites-sader-carter.vercel.app";
+      process.env.NEXT_PUBLIC_SITE_URL ||
+      "https://websites-sader-carter.vercel.app";
 
     const stripe = getStripe();
-    const session = await stripe.checkout.sessions.create({
-      mode: "payment",
-      customer_email: email.trim(),
-      line_items: [
-        {
-          price_data: {
-            currency: "usd",
-            product_data: {
-              name: `${pkg.charAt(0).toUpperCase() + pkg.slice(1)} Website Package`,
-              description: description?.trim() || undefined,
+
+    // Item 15 — timeout wrapper; rejects after 10 seconds
+    const session = await withTimeout(
+      stripe.checkout.sessions.create({
+        mode: "payment",
+        customer_email: email.trim(),
+        line_items: [
+          {
+            price_data: {
+              currency: "usd",
+              product_data: {
+                name: `${
+                  pkg.charAt(0).toUpperCase() + pkg.slice(1)
+                } Website Package`,
+                description: description?.trim() || undefined,
+              },
+              unit_amount: amount,
             },
-            unit_amount: amount,
+            quantity: 1,
           },
-          quantity: 1,
-        },
-      ],
-      success_url: `${origin}/order/success?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${origin}/order`,
-    });
+        ],
+        success_url: `${origin}/order/success?session_id={CHECKOUT_SESSION_ID}`,
+        cancel_url: `${origin}/order`,
+      }),
+      10_000
+    );
 
     return NextResponse.json({ url: session.url });
   } catch (err) {
+    if (err instanceof TimeoutError) {
+      console.error("Stripe checkout timed out:", err.message);
+      return NextResponse.json(
+        {
+          error:
+            "Payment setup is taking too long. Please try again in a moment.",
+        },
+        { status: 503 }
+      );
+    }
     console.error("Checkout session error:", err);
     return NextResponse.json(
       { error: "Payment setup failed. Please try again." },

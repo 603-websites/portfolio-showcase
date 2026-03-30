@@ -1,15 +1,37 @@
 import { createClient } from "@/lib/supabase/server";
-import { Calendar, Clock, Video, User } from "lucide-react";
+import { AlertCircle, Calendar, Clock, Video, User } from "lucide-react";
+import { formatDatetime } from "@/lib/format";
+import type { Metadata } from "next";
 
-export const metadata = { title: "Calendar | Website Upgraders Dev" };
+// Item 4
+export const metadata: Metadata = {
+  title: "Calendar — Dev Portal | 603 Websites",
+};
 
 export default async function CalendarPage() {
   const supabase = await createClient();
 
-  const { data: appointments } = await supabase
+  const { data: appointments, error } = await supabase
     .from("appointments")
     .select("*, clients(name)")
     .order("scheduled_at", { ascending: true });
+
+  // Item 1 — error state
+  if (error) {
+    return (
+      <div className="flex flex-col items-center justify-center h-64 gap-4">
+        <AlertCircle className="w-10 h-10 text-error" />
+        <p className="text-text-muted">Failed to load calendar data.</p>
+        <p className="text-text-dim text-sm">{error.message}</p>
+        <a
+          href="/dev/calendar"
+          className="bg-accent hover:bg-accent-hover text-white rounded-lg px-4 py-2 text-sm font-medium transition"
+        >
+          Retry
+        </a>
+      </div>
+    );
+  }
 
   const upcoming = (appointments || []).filter(
     (a) => new Date(a.scheduled_at) >= new Date()
@@ -27,13 +49,13 @@ export default async function CalendarPage() {
         </p>
       </div>
 
-      {/* Upcoming */}
       <div>
         <h2 className="text-lg font-semibold mb-4">Upcoming</h2>
+        {/* Item 1 — empty state */}
         {upcoming.length === 0 ? (
-          <div className="bg-dark-light border border-dark-border rounded-xl p-8 text-center">
-            <Calendar className="w-10 h-10 text-text-dim mx-auto mb-3" />
-            <p className="text-text-dim">No upcoming meetings</p>
+          <div className="bg-dark-light border border-dark-border rounded-xl p-8 text-center space-y-3">
+            <Calendar className="w-10 h-10 text-text-dim mx-auto" />
+            <p className="text-text-dim">No upcoming meetings scheduled.</p>
           </div>
         ) : (
           <div className="space-y-3">
@@ -49,12 +71,10 @@ export default async function CalendarPage() {
                   <div>
                     <h3 className="text-text font-medium">{apt.title}</h3>
                     <div className="flex items-center gap-4 mt-1 text-sm text-text-muted">
+                      {/* Item 6 — local timezone */}
                       <span className="flex items-center gap-1">
                         <Clock className="w-3.5 h-3.5" />
-                        {new Date(apt.scheduled_at).toLocaleString("en-US", {
-                          dateStyle: "medium",
-                          timeStyle: "short",
-                        })}
+                        {formatDatetime(apt.scheduled_at)}
                       </span>
                       <span>{apt.duration_minutes}min</span>
                       {apt.clients && (
@@ -82,7 +102,6 @@ export default async function CalendarPage() {
         )}
       </div>
 
-      {/* Past */}
       {past.length > 0 && (
         <div>
           <h2 className="text-lg font-semibold mb-4">Past Meetings</h2>
@@ -94,11 +113,9 @@ export default async function CalendarPage() {
               >
                 <div>
                   <p className="text-text text-sm">{apt.title}</p>
+                  {/* Item 6 — local timezone */}
                   <p className="text-text-dim text-xs">
-                    {new Date(apt.scheduled_at).toLocaleString("en-US", {
-                      dateStyle: "medium",
-                      timeStyle: "short",
-                    })}
+                    {formatDatetime(apt.scheduled_at)}
                     {apt.clients &&
                       ` · ${(apt.clients as unknown as { name: string }).name}`}
                   </p>

@@ -2,7 +2,9 @@
 
 import { useEffect, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
-import { Save, Loader2 } from "lucide-react";
+import { AlertCircle, Clock, Save, Loader2 } from "lucide-react";
+import toast from "react-hot-toast";
+import SessionExpiredModal from "@/components/shared/SessionExpiredModal";
 
 const DAYS = [
   "Monday",
@@ -27,35 +29,61 @@ export default function HoursEditorPage() {
     )
   );
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
-  const [saved, setSaved] = useState(false);
   const [clientId, setClientId] = useState<string | null>(null);
+  const [sessionExpired, setSessionExpired] = useState(false);
 
   const supabase = createClient();
 
   useEffect(() => {
     const load = async () => {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) return;
-      const { data: cu } = await supabase
-        .from("client_users")
-        .select("client_id")
-        .eq("user_id", user.id)
-        .single();
-      if (!cu) return;
-      setClientId(cu.client_id);
+      try {
+        const {
+          data: { user },
+          error: authError,
+        } = await supabase.auth.getUser();
 
-      const { data: content } = await supabase
-        .from("website_content")
-        .select("*")
-        .eq("client_id", cu.client_id)
-        .eq("content_type", "hours")
-        .single();
+        if (authError || !user) {
+          setSessionExpired(true);
+          setLoading(false);
+          return;
+        }
 
-      if (content?.content?.hours) {
-        setHours(content.content.hours);
+        const { data: cu, error: cuError } = await supabase
+          .from("client_users")
+          .select("client_id")
+          .eq("user_id", user.id)
+          .single();
+
+        if (cuError || !cu) {
+          setError("Failed to load your account.");
+          setLoading(false);
+          return;
+        }
+        setClientId(cu.client_id);
+
+        const { data: content, error: contentError } = await supabase
+          .from("website_content")
+          .select("*")
+          .eq("client_id", cu.client_id)
+          .eq("content_type", "hours")
+          .single();
+
+        if (contentError && contentError.code !== "PGRST116") {
+          setError("Failed to load hours.");
+          setLoading(false);
+          return;
+        }
+
+        if (content?.content?.hours) {
+          setHours(content.content.hours);
+        }
+      } catch {
+        setError("An unexpected error occurred.");
+      } finally {
+        setLoading(false);
       }
-      setLoading(false);
     };
     load();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -64,7 +92,7 @@ export default function HoursEditorPage() {
   const handleSave = async () => {
     if (!clientId) return;
     setSaving(true);
-    await supabase.from("website_content").upsert(
+    const { error: saveError } = await supabase.from("website_content").upsert(
       {
         client_id: clientId,
         content_type: "hours",
@@ -75,14 +103,52 @@ export default function HoursEditorPage() {
       { onConflict: "client_id,content_type" }
     );
     setSaving(false);
-    setSaved(true);
-    setTimeout(() => setSaved(false), 2000);
+    if (saveError) {
+      toast.error("Failed to save hours. Please try again.");
+    } else {
+      toast.success("Business hours saved!");
+    }
   };
 
+  if (sessionExpired) return <SessionExpiredModal show />;
+
+  // Item 1 — loading skeleton
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-64">
-        <Loader2 className="w-6 h-6 animate-spin text-accent" />
+      <div className="space-y-6 animate-pulse">
+        <div className="flex items-center justify-between">
+          <div className="space-y-2">
+            <div className="h-8 w-40 bg-dark-lighter rounded" />
+            <div className="h-4 w-48 bg-dark-lighter rounded" />
+          </div>
+          <div className="h-10 w-24 bg-dark-lighter rounded-lg" />
+        </div>
+        <div className="bg-dark-light border border-dark-border rounded-xl p-6 space-y-4">
+          {DAYS.map((day) => (
+            <div key={day} className="flex items-center gap-4">
+              <div className="h-5 w-24 bg-dark-lighter rounded" />
+              <div className="h-9 w-16 bg-dark-lighter rounded-lg" />
+              <div className="h-9 w-24 bg-dark-lighter rounded-lg" />
+              <div className="h-9 w-24 bg-dark-lighter rounded-lg" />
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  // Item 1 — error state
+  if (error) {
+    return (
+      <div className="flex flex-col items-center justify-center h-64 gap-4">
+        <AlertCircle className="w-10 h-10 text-error" />
+        <p className="text-text-muted">{error}</p>
+        <button
+          onClick={() => window.location.reload()}
+          className="bg-accent hover:bg-accent-hover text-white rounded-lg px-4 py-2 text-sm font-medium transition"
+        >
+          Retry
+        </button>
       </div>
     );
   }
@@ -94,20 +160,24 @@ export default function HoursEditorPage() {
           <h1 className="text-3xl font-bold">Business Hours</h1>
           <p className="text-text-muted mt-1">Set your weekly schedule</p>
         </div>
-        <div className="flex items-center gap-3">
-          {saved && <span className="text-success text-sm">Saved!</span>}
-          <button
-            onClick={handleSave}
-            disabled={saving}
-            className="bg-accent hover:bg-accent-hover text-white rounded-lg px-4 py-2.5 font-medium transition disabled:opacity-50 flex items-center gap-2"
-          >
-            {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
-            Save
-          </button>
-        </div>
+        <button
+          onClick={handleSave}
+          disabled={saving}
+          className="bg-accent hover:bg-accent-hover text-white rounded-lg px-4 py-2.5 font-medium transition disabled:opacity-50 flex items-center gap-2"
+        >
+          {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
+          Save
+        </button>
       </div>
 
+      {/* Item 1 — empty state not applicable here (DAYS always present) */}
       <div className="bg-dark-light border border-dark-border rounded-xl p-6 space-y-4">
+        {Object.keys(hours).length === 0 && (
+          <div className="text-center py-6 space-y-2">
+            <Clock className="w-10 h-10 text-text-dim mx-auto" />
+            <p className="text-text-dim text-sm">No hours configured yet.</p>
+          </div>
+        )}
         {DAYS.map((day) => (
           <div
             key={day}
@@ -117,7 +187,7 @@ export default function HoursEditorPage() {
             <label className="flex items-center gap-2 text-sm text-text-muted">
               <input
                 type="checkbox"
-                checked={!hours[day].closed}
+                checked={!hours[day]?.closed}
                 onChange={(e) =>
                   setHours({
                     ...hours,
@@ -128,11 +198,11 @@ export default function HoursEditorPage() {
               />
               Open
             </label>
-            {!hours[day].closed ? (
+            {!hours[day]?.closed ? (
               <div className="flex items-center gap-2">
                 <input
                   type="time"
-                  value={hours[day].open}
+                  value={hours[day]?.open || "09:00"}
                   onChange={(e) =>
                     setHours({
                       ...hours,
@@ -144,7 +214,7 @@ export default function HoursEditorPage() {
                 <span className="text-text-dim">to</span>
                 <input
                   type="time"
-                  value={hours[day].close}
+                  value={hours[day]?.close || "17:00"}
                   onChange={(e) =>
                     setHours({
                       ...hours,

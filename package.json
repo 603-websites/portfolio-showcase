@@ -7,7 +7,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "seed": "ts-node --project tsconfig.json --esm scripts/seed.ts"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",
@@ -20,15 +21,17 @@
     "next": "^15.2.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "react-hot-toast": "^2.6.0",
     "recharts": "^2.15.0",
     "stripe": "^17.5.0"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.0.0",
-    "@types/node": "^22.0.0",
+    "@types/node": "^22.19.15",
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
     "tailwindcss": "^4.0.0",
+    "ts-node": "^10.9.2",
     "typescript": "^5.7.0"
   }
 }

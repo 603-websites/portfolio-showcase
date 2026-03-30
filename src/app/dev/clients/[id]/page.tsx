@@ -2,8 +2,27 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft, ExternalLink, Mail, Phone } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
+import { formatDate, formatCurrency } from "@/lib/format";
+import type { Metadata } from "next";
 
 type Props = { params: Promise<{ id: string }> };
+
+// Item 4 — dynamic metadata
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { id } = await params;
+  const supabase = await createClient();
+  const { data } = await supabase
+    .from("clients")
+    .select("name")
+    .eq("id", id)
+    .single();
+
+  return {
+    title: data?.name
+      ? `${data.name} — Clients | 603 Websites`
+      : "Client Detail — Dev Portal | 603 Websites",
+  };
+}
 
 export default async function ClientDetailPage({ params }: Props) {
   const { id } = await params;
@@ -19,6 +38,8 @@ export default async function ClientDetailPage({ params }: Props) {
     supabase
       .from("invoices")
       .select("*")
+      // Item 12 — soft delete filter
+      .is("deleted_at", null)
       .eq("client_id", id)
       .order("invoice_date", { ascending: false }),
   ]);
@@ -52,7 +73,9 @@ export default async function ClientDetailPage({ params }: Props) {
             <h1 className="text-2xl font-bold">{client.name}</h1>
             <p className="text-text-muted">{client.business_name}</p>
             <div className="flex items-center gap-3 mt-2">
-              <span className={`text-xs px-2 py-1 rounded-full font-medium ${planColor}`}>
+              <span
+                className={`text-xs px-2 py-1 rounded-full font-medium ${planColor}`}
+              >
                 {client.plan}
               </span>
               <span
@@ -102,15 +125,24 @@ export default async function ClientDetailPage({ params }: Props) {
           <dl className="space-y-3 text-sm">
             <div className="flex justify-between">
               <dt className="text-text-muted">Monthly Revenue</dt>
-              <dd className="text-text font-medium">${client.monthly_revenue || 0}/mo</dd>
+              <dd className="text-text font-medium">
+                ${client.monthly_revenue || 0}/mo
+              </dd>
             </div>
             <div className="flex justify-between">
               <dt className="text-text-muted">Status</dt>
-              <dd className="text-text font-medium">{client.subscription_status || "—"}</dd>
+              <dd className="text-text font-medium">
+                {client.subscription_status || "—"}
+              </dd>
             </div>
             <div className="flex justify-between">
               <dt className="text-text-muted">Next Billing</dt>
-              <dd className="text-text font-medium">{client.next_billing_date || "—"}</dd>
+              {/* Item 6 — formatDate */}
+              <dd className="text-text font-medium">
+                {client.next_billing_date
+                  ? formatDate(client.next_billing_date)
+                  : "—"}
+              </dd>
             </div>
             <div className="flex justify-between">
               <dt className="text-text-muted">Stripe Customer</dt>
@@ -127,7 +159,7 @@ export default async function ClientDetailPage({ params }: Props) {
             Tasks ({tasks.length})
           </h2>
           {tasks.length === 0 ? (
-            <p className="text-text-dim text-sm">No tasks yet</p>
+            <p className="text-text-dim text-sm">No tasks for this client.</p>
           ) : (
             <div className="space-y-2">
               {tasks.slice(0, 5).map((t) => (
@@ -159,7 +191,7 @@ export default async function ClientDetailPage({ params }: Props) {
             Invoices ({invoices.length})
           </h2>
           {invoices.length === 0 ? (
-            <p className="text-text-dim text-sm">No invoices yet</p>
+            <p className="text-text-dim text-sm">No invoices for this client.</p>
           ) : (
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
@@ -177,9 +209,11 @@ export default async function ClientDetailPage({ params }: Props) {
                       key={inv.id}
                       className="border-b border-dark-border last:border-0"
                     >
-                      <td className="py-3 text-text">{inv.invoice_date}</td>
+                      {/* Item 6 — formatDate */}
+                      <td className="py-3 text-text">{formatDate(inv.invoice_date)}</td>
+                      {/* Item 13 — formatCurrency */}
                       <td className="py-3 text-text font-medium">
-                        ${(inv.amount_cents / 100).toFixed(2)}
+                        {formatCurrency(inv.amount_cents)}
                       </td>
                       <td className="py-3">
                         <span
@@ -195,9 +229,8 @@ export default async function ClientDetailPage({ params }: Props) {
                         </span>
                       </td>
                       <td className="py-3 text-text-muted">
-                        {inv.paid_at
-                          ? new Date(inv.paid_at).toLocaleDateString()
-                          : "—"}
+                        {/* Item 6 — formatDate */}
+                        {inv.paid_at ? formatDate(inv.paid_at) : "—"}
                       </td>
                     </tr>
                   ))}

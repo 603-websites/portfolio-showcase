@@ -1,20 +1,41 @@
 import { createClient } from "@/lib/supabase/server";
-import { BarChart3, Eye, Users, TrendingDown } from "lucide-react";
+import { AlertCircle, BarChart3, Eye, Users, TrendingDown } from "lucide-react";
+import { formatDate } from "@/lib/format";
+import type { Metadata } from "next";
 
-export const metadata = { title: "Analytics | Website Upgraders Dev" };
+// Item 4
+export const metadata: Metadata = {
+  title: "Analytics — Dev Portal | 603 Websites",
+};
 
 export default async function DevAnalyticsPage() {
   const supabase = await createClient();
 
-  const { data: snapshots } = await supabase
+  const { data: snapshots, error } = await supabase
     .from("analytics_snapshots")
     .select("*")
     .order("snapshot_date", { ascending: false })
     .limit(100);
 
+  // Item 1 — error state
+  if (error) {
+    return (
+      <div className="flex flex-col items-center justify-center h-64 gap-4">
+        <AlertCircle className="w-10 h-10 text-error" />
+        <p className="text-text-muted">Failed to load analytics data.</p>
+        <p className="text-text-dim text-sm">{error.message}</p>
+        <a
+          href="/dev/analytics"
+          className="bg-accent hover:bg-accent-hover text-white rounded-lg px-4 py-2 text-sm font-medium transition"
+        >
+          Retry
+        </a>
+      </div>
+    );
+  }
+
   const allSnapshots = snapshots || [];
 
-  // Aggregate totals across all clients for last 30 days
   const thirtyDaysAgo = new Date();
   thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
   const recent = allSnapshots.filter(
@@ -68,10 +89,11 @@ export default async function DevAnalyticsPage() {
         </div>
       </div>
 
+      {/* Item 1 — empty state */}
       {allSnapshots.length === 0 ? (
-        <div className="bg-dark-light border border-dark-border rounded-xl p-12 text-center">
-          <BarChart3 className="w-12 h-12 text-text-dim mx-auto mb-4" />
-          <h3 className="text-lg font-semibold text-text mb-2">
+        <div className="bg-dark-light border border-dark-border rounded-xl p-12 text-center space-y-3">
+          <BarChart3 className="w-12 h-12 text-text-dim mx-auto" />
+          <h3 className="text-lg font-semibold text-text">
             No Analytics Data Yet
           </h3>
           <p className="text-text-dim text-sm max-w-md mx-auto">
@@ -98,9 +120,10 @@ export default async function DevAnalyticsPage() {
                     key={s.id}
                     className="border-b border-dark-border last:border-0"
                   >
-                    <td className="py-2 text-text">{s.snapshot_date}</td>
-                    <td className="py-2 text-text">{s.page_views}</td>
-                    <td className="py-2 text-text">{s.unique_visitors}</td>
+                    {/* Item 6 — local timezone date */}
+                    <td className="py-2 text-text">{formatDate(s.snapshot_date)}</td>
+                    <td className="py-2 text-text">{s.page_views.toLocaleString()}</td>
+                    <td className="py-2 text-text">{s.unique_visitors.toLocaleString()}</td>
                     <td className="py-2 text-text">{s.bounce_rate}%</td>
                   </tr>
                 ))}

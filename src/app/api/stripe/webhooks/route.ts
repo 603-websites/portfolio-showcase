@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { logAudit } from "@/lib/audit";
 import Stripe from "stripe";
 
 export const runtime = "nodejs";
@@ -56,15 +57,52 @@ export async function POST(request: Request) {
           .from("clients")
           .update({ subscription_status: sub.status })
           .eq("stripe_subscription_id", sub.id);
+
+        // Item 9 — audit log
+        const { data: client } = await supabase
+          .from("clients")
+          .select("id")
+          .eq("stripe_subscription_id", sub.id)
+          .single();
+        if (client) {
+          await logAudit(
+            "subscription_updated",
+            "client",
+            client.id,
+            undefined,
+            { stripe_subscription_id: sub.id, status: sub.status }
+          );
+        }
         break;
       }
 
       case "customer.subscription.deleted": {
         const sub = event.data.object as Stripe.Subscription;
+
+        // Item 8 — set status to "churned" so middleware blocks access
         await supabase
           .from("clients")
           .update({ status: "churned", subscription_status: "canceled" })
           .eq("stripe_subscription_id", sub.id);
+
+        // Item 9 — audit log
+        const { data: client } = await supabase
+          .from("clients")
+          .select("id")
+          .eq("stripe_subscription_id", sub.id)
+          .single();
+        if (client) {
+          await logAudit(
+            "subscription_canceled",
+            "client",
+            client.id,
+            undefined,
+            {
+              stripe_subscription_id: sub.id,
+              canceled_at: new Date().toISOString(),
+            }
+          );
+        }
         break;
       }
 
@@ -97,6 +135,18 @@ export async function POST(request: Request) {
               },
               { onConflict: "stripe_invoice_id" }
             );
+
+            // Item 9 — audit log
+            await logAudit(
+              "invoice_paid",
+              "client",
+              client.id,
+              undefined,
+              {
+                stripe_invoice_id: invoice.id,
+                amount_cents: invoice.amount_paid,
+              }
+            );
           }
         }
         break;
@@ -114,6 +164,22 @@ export async function POST(request: Request) {
             .from("clients")
             .update({ subscription_status: "past_due" })
             .eq("stripe_subscription_id", subId);
+
+          // Item 9 — audit log
+          const { data: client } = await supabase
+            .from("clients")
+            .select("id")
+            .eq("stripe_subscription_id", subId)
+            .single();
+          if (client) {
+            await logAudit(
+              "invoice_payment_failed",
+              "client",
+              client.id,
+              undefined,
+              { stripe_invoice_id: invoice.id }
+            );
+          }
         }
         break;
       }

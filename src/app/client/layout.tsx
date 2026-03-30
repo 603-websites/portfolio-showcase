@@ -1,6 +1,12 @@
+import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import ClientSidebar from "@/components/client/ClientSidebar";
+
+// Item 4 — base title; individual pages override this with their own metadata
+export const metadata: Metadata = {
+  title: "Client Portal | 603 Websites",
+};
 
 export default async function ClientLayout({
   children,
