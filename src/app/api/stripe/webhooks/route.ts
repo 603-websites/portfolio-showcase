@@ -32,74 +32,103 @@ export async function POST(request: Request) {
 
   const supabase = createAdminClient();
 
-  switch (event.type) {
-    case "customer.subscription.updated": {
-      const sub = event.data.object as Stripe.Subscription;
-      await supabase
-        .from("clients")
-        .update({ subscription_status: sub.status })
-        .eq("stripe_subscription_id", sub.id);
-      break;
-    }
+  // Idempotency: skip events we have already processed
+  const { data: existing } = await supabase
+    .from("processed_stripe_events")
+    .select("id")
+    .eq("event_id", event.id)
+    .single();
 
-    case "customer.subscription.deleted": {
-      const sub = event.data.object as Stripe.Subscription;
-      await supabase
-        .from("clients")
-        .update({ status: "churned", subscription_status: "canceled" })
-        .eq("stripe_subscription_id", sub.id);
-      break;
-    }
+  if (existing) {
+    return NextResponse.json({ received: true, skipped: true });
+  }
 
-    case "invoice.paid": {
-      const invoice = event.data.object as Stripe.Invoice;
-      const subId =
-        typeof invoice.subscription === "string"
-          ? invoice.subscription
-          : invoice.subscription?.id;
+  // Mark event as processed before handling (prevents duplicate processing on retry)
+  await supabase
+    .from("processed_stripe_events")
+    .insert({ event_id: event.id, event_type: event.type });
 
-      if (subId) {
-        const { data: client } = await supabase
-          .from("clients")
-          .select("id")
-          .eq("stripe_subscription_id", subId)
-          .single();
-
-        if (client) {
-          await supabase.from("invoices").upsert(
-            {
-              client_id: client.id,
-              stripe_invoice_id: invoice.id,
-              amount_cents: invoice.amount_paid,
-              status: "paid",
-              invoice_date: new Date(
-                invoice.created * 1000
-              ).toISOString().split("T")[0],
-              paid_at: new Date().toISOString(),
-              invoice_pdf_url: invoice.invoice_pdf || null,
-            },
-            { onConflict: "stripe_invoice_id" }
-          );
-        }
-      }
-      break;
-    }
-
-    case "invoice.payment_failed": {
-      const invoice = event.data.object as Stripe.Invoice;
-      const subId =
-        typeof invoice.subscription === "string"
-          ? invoice.subscription
-          : invoice.subscription?.id;
-
-      if (subId) {
+  try {
+    switch (event.type) {
+      case "customer.subscription.updated": {
+        const sub = event.data.object as Stripe.Subscription;
         await supabase
           .from("clients")
-          .update({ subscription_status: "past_due" })
-          .eq("stripe_subscription_id", subId);
+          .update({ subscription_status: sub.status })
+          .eq("stripe_subscription_id", sub.id);
+        break;
       }
-      break;
+
+      case "customer.subscription.deleted": {
+        const sub = event.data.object as Stripe.Subscription;
+        await supabase
+          .from("clients")
+          .update({ status: "churned", subscription_status: "canceled" })
+          .eq("stripe_subscription_id", sub.id);
+        break;
+      }
+
+      case "invoice.paid": {
+        const invoice = event.data.object as Stripe.Invoice;
+        const subId =
+          typeof invoice.subscription === "string"
+            ? invoice.subscription
+            : invoice.subscription?.id;
+
+        if (subId) {
+          const { data: client } = await supabase
+            .from("clients")
+            .select("id")
+            .eq("stripe_subscription_id", subId)
+            .single();
+
+          if (client) {
+            await supabase.from("invoices").upsert(
+              {
+                client_id: client.id,
+                stripe_invoice_id: invoice.id,
+                amount_cents: invoice.amount_paid,
+                status: "paid",
+                invoice_date: new Date(invoice.created * 1000)
+                  .toISOString()
+                  .split("T")[0],
+                paid_at: new Date().toISOString(),
+                invoice_pdf_url: invoice.invoice_pdf || null,
+              },
+              { onConflict: "stripe_invoice_id" }
+            );
+          }
+        }
+        break;
+      }
+
+      case "invoice.payment_failed": {
+        const invoice = event.data.object as Stripe.Invoice;
+        const subId =
+          typeof invoice.subscription === "string"
+            ? invoice.subscription
+            : invoice.subscription?.id;
+
+        if (subId) {
+          await supabase
+            .from("clients")
+            .update({ subscription_status: "past_due" })
+            .eq("stripe_subscription_id", subId);
+        }
+        break;
+      }
     }
+  } catch (err) {
+    console.error(`Error handling Stripe event ${event.type}:`, err);
+    // Remove the processed record so Stripe can retry
+    await supabase
+      .from("processed_stripe_events")
+      .delete()
+      .eq("event_id", event.id);
+    return NextResponse.json(
+      { error: "Event processing failed" },
+      { status: 500 }
+    );
   }
 
   return NextResponse.json({ received: true });

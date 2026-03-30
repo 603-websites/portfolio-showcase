@@ -11,9 +11,21 @@ export default function ForgotPasswordPage() {
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [cooldownSeconds, setCooldownSeconds] = useState(0);
+
+  const startCooldown = () => {
+    let seconds = 60;
+    setCooldownSeconds(seconds);
+    const interval = setInterval(() => {
+      seconds -= 1;
+      setCooldownSeconds(seconds);
+      if (seconds <= 0) clearInterval(interval);
+    }, 1000);
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (cooldownSeconds > 0) return;
     setError(null);
     setLoading(true);
 
@@ -29,6 +41,7 @@ export default function ForgotPasswordPage() {
       }
 
       setSuccess(true);
+      startCooldown();
     } catch {
       setError("An unexpected error occurred. Please try again.");
     } finally {
@@ -97,11 +110,13 @@ export default function ForgotPasswordPage() {
 
             <button
               type="submit"
-              disabled={loading}
+              disabled={loading || cooldownSeconds > 0}
               className="w-full bg-accent hover:bg-accent-hover text-white font-medium py-3 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
             >
               {loading && <Loader2 size={18} className="animate-spin" />}
-              Send Reset Link
+              {cooldownSeconds > 0
+                ? `Resend in ${cooldownSeconds}s`
+                : "Send Reset Link"}
             </button>
           </form>
         </>

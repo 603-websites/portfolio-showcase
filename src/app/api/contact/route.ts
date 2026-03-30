@@ -1,6 +1,9 @@
 import { NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 
+const RATE_LIMIT_WINDOW_MS = 10 * 60 * 1000; // 10 minutes
+const RATE_LIMIT_MAX = 3;
+
 export async function POST(request: Request) {
   try {
     const body = await request.json();
@@ -33,9 +36,24 @@ export async function POST(request: Request) {
       );
     }
 
-    const ip = request.headers.get("x-forwarded-for")?.split(",")[0] || "unknown";
-
+    const ip = request.headers.get("x-forwarded-for")?.split(",")[0].trim() || "unknown";
     const supabase = createAdminClient();
+
+    // Rate limit: max 3 submissions per IP per 10 minutes
+    const windowStart = new Date(Date.now() - RATE_LIMIT_WINDOW_MS).toISOString();
+    const { count } = await supabase
+      .from("contact_submissions")
+      .select("*", { count: "exact", head: true })
+      .eq("ip_address", ip)
+      .gte("created_at", windowStart);
+
+    if ((count ?? 0) >= RATE_LIMIT_MAX) {
+      return NextResponse.json(
+        { error: "Too many submissions. Please wait a few minutes before trying again." },
+        { status: 429 }
+      );
+    }
+
     const { error } = await supabase.from("contact_submissions").insert({
       name: name.trim(),
       email: email.trim(),

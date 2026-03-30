@@ -7,7 +7,6 @@ import { motion } from "framer-motion";
 import { Loader2, Check } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 
-const DEV_EMAILS = ["louissader42@gmail.com", "michaelsader1@gmail.com", "logan.carter1@me.com"];
 
 export default function SignupPage() {
   const router = useRouter();
@@ -64,7 +63,7 @@ export default function SignupPage() {
         return;
       }
 
-      router.push(DEV_EMAILS.includes(email.toLowerCase()) ? "/dev/dashboard" : "/onboarding");
+      router.push("/onboarding");
     } catch {
       setError("An unexpected error occurred. Please try again.");
     } finally {
