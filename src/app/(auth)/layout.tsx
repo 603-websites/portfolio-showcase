@@ -4,7 +4,7 @@ import Navbar from "@/components/shared/Navbar";
 
 // Item 4 — base title for the auth group; individual pages override as needed
 export const metadata: Metadata = {
-  title: "Sign In — 603 Websites",
+  title: "Sign In — Website Upgraders",
 };
 
 export default function AuthLayout({ children }: { children: React.ReactNode }) {

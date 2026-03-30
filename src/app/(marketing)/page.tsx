@@ -3,7 +3,7 @@ import Link from "next/link";
 
 // Item 4
 export const metadata: Metadata = {
-  title: "603 Websites | Managed Website Subscriptions",
+  title: "Website Upgraders | Managed Website Subscriptions",
 };
 import {
   Wrench,

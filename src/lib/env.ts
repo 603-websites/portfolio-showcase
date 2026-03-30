@@ -4,9 +4,12 @@
  * variable is missing, rather than throwing a cryptic error mid-request.
  */
 
-const REQUIRED_VARS = [
+const CRITICAL_VARS = [
   "NEXT_PUBLIC_SUPABASE_URL",
   "NEXT_PUBLIC_SUPABASE_ANON_KEY",
+] as const;
+
+const OPTIONAL_VARS = [
   "SUPABASE_SERVICE_KEY",
   "STRIPE_SECRET_KEY",
   "STRIPE_WEBHOOK_SECRET",
@@ -15,17 +18,23 @@ const REQUIRED_VARS = [
   "STRIPE_PRO_PRICE_ID",
 ] as const;
 
+const REQUIRED_VARS = [...CRITICAL_VARS, ...OPTIONAL_VARS] as const;
 type RequiredVar = (typeof REQUIRED_VARS)[number];
 
 // Only validate on the server; NEXT_PUBLIC_ vars are available in the browser
 // but server-only vars (SUPABASE_SERVICE_KEY, STRIPE_*) are not.
 if (typeof window === "undefined") {
-  for (const key of REQUIRED_VARS) {
+  for (const key of CRITICAL_VARS) {
     if (!process.env[key]) {
       throw new Error(
         `Missing required environment variable: ${key}\n` +
           `Add it to .env.local and restart the dev server.`
       );
+    }
+  }
+  for (const key of OPTIONAL_VARS) {
+    if (!process.env[key]) {
+      console.warn(`[env] Missing optional variable: ${key} (Stripe/admin features will be disabled)`);
     }
   }
 }

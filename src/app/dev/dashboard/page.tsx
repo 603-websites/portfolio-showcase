@@ -14,7 +14,7 @@ import { formatDatetime } from "@/lib/format";
 
 // Item 4
 export const metadata: Metadata = {
-  title: "Dashboard — Dev Portal | 603 Websites",
+  title: "Dashboard — Dev Portal | Website Upgraders",
 };
 
 export default async function DevDashboard() {

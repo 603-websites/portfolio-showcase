@@ -19,8 +19,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   return {
     title: data?.name
-      ? `${data.name} — Clients | 603 Websites`
-      : "Client Detail — Dev Portal | 603 Websites",
+      ? `${data.name} — Clients | Website Upgraders`
+      : "Client Detail — Dev Portal | Website Upgraders",
   };
 }
 

@@ -5,7 +5,7 @@ import ClientSidebar from "@/components/client/ClientSidebar";
 
 // Item 4 — base title; individual pages override this with their own metadata
 export const metadata: Metadata = {
-  title: "Client Portal | 603 Websites",
+  title: "Client Portal | Website Upgraders",
 };
 
 export default async function ClientLayout({

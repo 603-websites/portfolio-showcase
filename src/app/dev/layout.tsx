@@ -5,7 +5,7 @@ import DevSidebar from "@/components/dev/DevSidebar";
 
 // Item 4 — base title for dev portal; individual pages override
 export const metadata: Metadata = {
-  title: "Dev Portal | 603 Websites",
+  title: "Dev Portal | Website Upgraders",
 };
 
 export default async function DevLayout({

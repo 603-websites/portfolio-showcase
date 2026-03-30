@@ -6,7 +6,7 @@ import type { Metadata } from "next";
 
 // Item 4 — descriptive tab title
 export const metadata: Metadata = {
-  title: "Dashboard — Client Portal | 603 Websites",
+  title: "Dashboard — Client Portal | Website Upgraders",
 };
 
 export default async function ClientDashboard() {

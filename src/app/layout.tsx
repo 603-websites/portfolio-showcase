@@ -9,14 +9,14 @@ import "@/lib/env";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "603 Websites | Managed Website Subscriptions",
+  title: "Website Upgraders | Managed Website Subscriptions",
   description:
     "Professional managed website subscriptions for small businesses in New England and beyond.",
   openGraph: {
-    title: "603 Websites",
+    title: "Website Upgraders",
     description:
       "We build and manage fast, professional websites for small businesses.",
-    siteName: "603 Websites",
+    siteName: "Website Upgraders",
   },
 };
 

@@ -5,7 +5,7 @@ import type { Metadata } from "next";
 
 // Item 4
 export const metadata: Metadata = {
-  title: "Meetings — Client Portal | 603 Websites",
+  title: "Meetings — Client Portal | Website Upgraders",
 };
 
 export default async function ClientMeetingsPage() {
