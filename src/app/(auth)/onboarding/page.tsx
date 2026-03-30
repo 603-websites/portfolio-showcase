@@ -23,7 +23,7 @@ export default function OnboardingPage() {
   }, [router]);
   const [phone, setPhone] = useState("");
   const [websiteUrl, setWebsiteUrl] = useState("");
-  const [description, setDescription] = useState("");
+  const [notes, setNotes] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
@@ -52,7 +52,7 @@ export default function OnboardingPage() {
           email: user.email,
           phone: phone || null,
           website_url: websiteUrl || null,
-          description: description || null,
+          notes: notes || null,
           status: "active",
           subscription_status: "active",
           plan: user.user_metadata?.plan || "growth",
@@ -160,15 +160,15 @@ export default function OnboardingPage() {
         </div>
 
         <div>
-          <label htmlFor="description" className="block text-sm font-medium text-text mb-1.5">
+          <label htmlFor="notes" className="block text-sm font-medium text-text mb-1.5">
             Tell us about your business{" "}
             <span className="text-text-dim font-normal">(optional)</span>
           </label>
           <textarea
-            id="description"
+            id="notes"
             rows={4}
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
+            value={notes}
+            onChange={(e) => setNotes(e.target.value)}
             placeholder="What does your business do? What are your goals for your website?"
             className="bg-dark-lighter border border-dark-border rounded-lg px-4 py-3 text-text placeholder-text-dim focus:border-accent focus:ring-1 focus:ring-accent outline-none w-full resize-none"
           />

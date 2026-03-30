@@ -145,9 +145,10 @@ export default function HomePage() {
       </section>
 
       {/* How It Works */}
-      <section className="py-20">
+      <section className="py-20 relative">
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-violet/[0.03] to-transparent pointer-events-none" />
         <SectionReveal>
-          <div className="max-w-6xl mx-auto px-4">
+          <div className="max-w-6xl mx-auto px-4 relative">
             <h2 className="text-3xl md:text-4xl font-bold text-center mb-16">
               How It Works
             </h2>
@@ -155,9 +156,9 @@ export default function HomePage() {
               {steps.map((step, i) => (
                 <div
                   key={step.title}
-                  className="bg-dark-light border border-dark-border rounded-2xl p-8 text-center"
+                  className="bg-dark-light border border-dark-border rounded-2xl p-8 text-center hover:border-violet/30 transition-colors"
                 >
-                  <div className="w-14 h-14 rounded-xl bg-accent/10 flex items-center justify-center mx-auto mb-6">
+                  <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-accent/10 to-violet/10 flex items-center justify-center mx-auto mb-6">
                     <step.icon className="w-7 h-7 text-accent" />
                   </div>
                   <div className="text-text-dim text-sm font-medium mb-2">
@@ -175,9 +176,10 @@ export default function HomePage() {
       </section>
 
       {/* Pricing */}
-      <section className="py-20">
+      <section className="py-20 relative">
+        <div className="absolute inset-0 bg-gradient-to-br from-accent/[0.04] via-transparent to-violet/[0.04] pointer-events-none" />
         <SectionReveal>
-          <div className="max-w-6xl mx-auto px-4">
+          <div className="max-w-6xl mx-auto px-4 relative">
             <h2 className="text-3xl md:text-4xl font-bold text-center mb-4">
               Simple, Flat Pricing
             </h2>
@@ -242,9 +244,10 @@ export default function HomePage() {
       </section>
 
       {/* Why Work With Us */}
-      <section className="py-20">
+      <section className="py-20 relative">
+        <div className="absolute inset-0 bg-gradient-to-t from-transparent via-violet/[0.03] to-transparent pointer-events-none" />
         <SectionReveal>
-          <div className="max-w-6xl mx-auto px-4">
+          <div className="max-w-6xl mx-auto px-4 relative">
             <h2 className="text-3xl md:text-4xl font-bold text-center mb-16">
               Why Work With Us
             </h2>
@@ -252,9 +255,9 @@ export default function HomePage() {
               {benefits.map((benefit) => (
                 <div
                   key={benefit.title}
-                  className="bg-dark-light border border-dark-border rounded-2xl p-6"
+                  className="bg-dark-light border border-dark-border rounded-2xl p-6 hover:border-accent/30 transition-colors"
                 >
-                  <div className="w-12 h-12 rounded-xl bg-accent/10 flex items-center justify-center mb-4">
+                  <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-accent/10 to-violet/10 flex items-center justify-center mb-4">
                     <benefit.icon className="w-6 h-6 text-accent" />
                   </div>
                   <h3 className="text-lg font-semibold text-text mb-2">
@@ -283,9 +286,10 @@ export default function HomePage() {
       </section>
 
       {/* CTA */}
-      <section className="py-20">
+      <section className="py-20 relative">
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-accent/[0.04] to-violet/[0.06] pointer-events-none" />
         <SectionReveal>
-          <div className="max-w-3xl mx-auto px-4 text-center">
+          <div className="max-w-3xl mx-auto px-4 text-center relative">
             <h2 className="text-3xl md:text-4xl font-bold mb-4">
               Start Today
             </h2>
