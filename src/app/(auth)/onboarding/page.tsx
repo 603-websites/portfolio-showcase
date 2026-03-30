@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { Loader2 } from "lucide-react";
@@ -9,6 +9,18 @@ import { createClient } from "@/lib/supabase/client";
 export default function OnboardingPage() {
   const router = useRouter();
   const [businessName, setBusinessName] = useState("");
+
+  // Redirect devs away from onboarding
+  useEffect(() => {
+    const checkRole = async () => {
+      const supabase = createClient();
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user?.user_metadata?.role === "dev") {
+        router.replace("/dev/dashboard");
+      }
+    };
+    checkRole();
+  }, [router]);
   const [phone, setPhone] = useState("");
   const [websiteUrl, setWebsiteUrl] = useState("");
   const [description, setDescription] = useState("");
