@@ -12,20 +12,20 @@ export const metadata: Metadata = {
 
 const team = [
   {
-    name: "Louis Sader",
-    title: "Co-Founder",
-    bio: "Software developer with professional experience at startups and enterprise companies. Passionate about building fast, accessible websites that help businesses grow.",
-    image: "/images/team/louis.jpg",
-    linkedinUrl: "https://linkedin.com/in/louis-sader-a6a391287/",
-    githubUrl: "https://github.com/louissader",
-  },
-  {
     name: "Logan Carter",
     title: "Co-Founder",
     bio: "Engineering student at CU Boulder (Class of 2027), Dean's List, Honors College. Brings a unique blend of engineering discipline and creative problem-solving.",
     image: "/images/team/logan.jpg",
     linkedinUrl: "https://linkedin.com/in/logan-carter-35h/",
     githubUrl: "https://github.com/Logan566C",
+  },
+  {
+    name: "Louis Sader",
+    title: "Co-Founder",
+    bio: "Software developer with professional experience at startups and enterprise companies. Passionate about building fast, accessible websites that help businesses grow.",
+    image: "/images/team/louis.jpg",
+    linkedinUrl: "https://linkedin.com/in/louis-sader-a6a391287/",
+    githubUrl: "https://github.com/louissader",
   },
   {
     name: "Michael Sader",
