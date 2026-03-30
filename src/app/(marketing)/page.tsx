@@ -111,16 +111,16 @@ export default function HomePage() {
           </div>
           <div className="flex gap-8 text-sm">
             <div>
-              <p className="text-2xl font-bold text-text">5</p>
-              <p className="text-text-muted">Active Clients</p>
+              <p className="text-2xl font-bold text-text">24/7</p>
+              <p className="text-text-muted">Support &amp; 99.9% Uptime</p>
             </div>
             <div>
-              <p className="text-2xl font-bold text-text">99.9%</p>
-              <p className="text-text-muted">Uptime</p>
+              <p className="text-2xl font-bold text-text">SEO</p>
+              <p className="text-text-muted">Google Business Optimization</p>
             </div>
             <div>
-              <p className="text-2xl font-bold text-text">&lt; 24hr</p>
-              <p className="text-text-muted">Support</p>
+              <p className="text-2xl font-bold text-text">More</p>
+              <p className="text-text-muted">Guaranteed Business Traffic</p>
             </div>
           </div>
         </div>
