@@ -5,7 +5,7 @@ import type { Metadata } from "next";
 
 // Item 4
 export const metadata: Metadata = {
-  title: "Analytics — Dev Portal | Website Upgraders",
+  title: "Analytics | Dev Portal | Website Upgraders",
 };
 
 export default async function DevAnalyticsPage() {

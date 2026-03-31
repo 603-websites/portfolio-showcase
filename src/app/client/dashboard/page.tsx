@@ -6,7 +6,7 @@ import type { Metadata } from "next";
 
 // Item 4 — descriptive tab title
 export const metadata: Metadata = {
-  title: "Dashboard — Client Portal | Website Upgraders",
+  title: "Dashboard | Client Portal | Website Upgraders",
 };
 
 export default async function ClientDashboard() {
@@ -111,12 +111,17 @@ export default async function ClientDashboard() {
       <div className="flex flex-col items-center justify-center h-64 gap-4 text-center">
         <LayoutDashboard className="w-12 h-12 text-text-dim" />
         <h2 className="text-lg font-semibold text-text">
-          Your dashboard is being set up
+          Complete your account setup
         </h2>
         <p className="text-text-muted text-sm max-w-sm">
-          Your account is not linked to a client record yet. Contact support if
-          this persists.
+          We need a few details to get your dashboard ready.
         </p>
+        <Link
+          href="/onboarding"
+          className="bg-accent hover:bg-accent-hover text-white rounded-lg px-6 py-2.5 text-sm font-medium transition"
+        >
+          Complete Setup
+        </Link>
       </div>
     );
   }
