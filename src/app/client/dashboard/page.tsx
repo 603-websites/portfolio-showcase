@@ -71,12 +71,17 @@ export default async function ClientDashboard() {
     }>;
   } | null;
 
-  // Last 30 days analytics
+  // Last 30 days analytics.
+  // snapshot_date is a date-only string (YYYY-MM-DD). Parsing it with
+  // new Date() treats it as UTC midnight, which can fall before a local-time
+  // threshold and wrongly exclude data. We compare ISO date strings directly
+  // to avoid any timezone shift.
   const thirtyDaysAgo = new Date();
   thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+  const thirtyDaysAgoStr = thirtyDaysAgo.toISOString().slice(0, 10); // "YYYY-MM-DD"
   const recentSnapshots =
     client?.analytics_snapshots?.filter(
-      (s) => new Date(s.snapshot_date) >= thirtyDaysAgo
+      (s) => s.snapshot_date >= thirtyDaysAgoStr
     ) || [];
   const totalViews = recentSnapshots.reduce(
     (s, r) => s + (r.page_views || 0),

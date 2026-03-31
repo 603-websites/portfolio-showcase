@@ -35,10 +35,22 @@ export function NewAppointmentModal({ clients }: { clients: Client[] }) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
+
+    if (!date || !time) {
+      setError("Please select a date and time.");
+      return;
+    }
+
+    const parsedDate = new Date(`${date}T${time}`);
+    if (isNaN(parsedDate.getTime())) {
+      setError("Invalid date or time. Please check your input.");
+      return;
+    }
+
     setLoading(true);
 
     try {
-      const scheduled_at = new Date(`${date}T${time}`).toISOString();
+      const scheduled_at = parsedDate.toISOString();
 
       const res = await fetch("/api/appointments", {
         method: "POST",

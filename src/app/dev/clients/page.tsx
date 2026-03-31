@@ -31,10 +31,9 @@ export default function ClientsPage() {
   const [error, setError] = useState<string | null>(null);
   const [sessionExpired, setSessionExpired] = useState(false);
 
-  const supabase = createClient();
-
   const fetchClients = async () => {
     try {
+      const supabase = createClient();
       const {
         data: { user },
         error: authError,

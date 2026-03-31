@@ -6,11 +6,22 @@
 
 /**
  * Formats a date as "Mar 30, 2026".
- * Accepts a ISO string or a Date object.
+ * Accepts an ISO string or a Date object.
  * Always renders in the user's local timezone.
+ *
+ * Date-only ISO strings (YYYY-MM-DD) are parsed with the Date constructor as
+ * UTC midnight, which causes an off-by-one day in timezones behind UTC.
+ * We detect that format and build the Date using the local-time constructor
+ * (year, monthIndex, day) to avoid the shift.
  */
 export function formatDate(date: string | Date): string {
-  const d = typeof date === "string" ? new Date(date) : date;
+  let d: Date;
+  if (typeof date === "string" && /^\d{4}-\d{2}-\d{2}$/.test(date)) {
+    const [year, month, day] = date.split("-").map(Number);
+    d = new Date(year, month - 1, day);
+  } else {
+    d = typeof date === "string" ? new Date(date) : date;
+  }
   return d.toLocaleDateString("en-US", {
     month: "short",
     day: "numeric",

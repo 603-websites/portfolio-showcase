@@ -25,13 +25,17 @@ export default function RevenueChart({ invoices }: { invoices: Invoice[] }) {
 
   const data = Object.entries(monthlyData)
     .sort(([a], [b]) => a.localeCompare(b))
-    .map(([month, revenue]) => ({
-      month: new Date(month + "-01").toLocaleDateString("en-US", {
+    .map(([month, revenue]) => {
+      // Parse YYYY-MM manually to avoid UTC-to-local timezone shift when
+      // constructing a date from an ISO date-only string (which is parsed as
+      // UTC midnight and can roll back a day in US timezones).
+      const [year, mon] = month.split("-").map(Number);
+      const label = new Date(year, mon - 1, 1).toLocaleDateString("en-US", {
         month: "short",
         year: "2-digit",
-      }),
-      revenue,
-    }));
+      });
+      return { month: label, revenue };
+    });
 
   if (data.length === 0) {
     return (

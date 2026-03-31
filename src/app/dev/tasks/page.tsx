@@ -1,9 +1,10 @@
 "use client";
 
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useMemo } from "react";
 import { AlertCircle, Plus, SquareCheckBig } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import toast from "react-hot-toast";
+import { formatDate } from "@/lib/format";
 import SessionExpiredModal from "@/components/shared/SessionExpiredModal";
 
 // Item 4 — title set via metadata export is not possible in "use client" pages;
@@ -49,7 +50,7 @@ export default function TasksPage() {
   // Item 14 — search/filter state
   const [search, setSearch] = useState("");
 
-  const supabase = createClient();
+  const supabase = useMemo(() => createClient(), []);
 
   const fetchData = useCallback(async () => {
     try {
@@ -81,8 +82,7 @@ export default function TasksPage() {
     } finally {
       setLoading(false);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [supabase]);
 
   useEffect(() => {
     fetchData();
@@ -281,7 +281,7 @@ export default function TasksPage() {
                     </div>
                     {task.due_date && (
                       <p className="text-xs text-text-dim mt-1">
-                        Due: {task.due_date}
+                        Due: {formatDate(task.due_date)}
                       </p>
                     )}
                   </div>
