@@ -9,14 +9,26 @@ import "@/lib/env";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(
+    process.env.NEXT_PUBLIC_SITE_URL || "https://website-upgraders.vercel.app"
+  ),
   title: "Website Upgraders | Managed Website Subscriptions",
   description:
     "Professional managed website subscriptions for small businesses in New England and beyond.",
   openGraph: {
-    title: "Website Upgraders",
+    title: "Website Upgraders | Managed Websites for Small Businesses",
     description:
-      "We build and manage fast, professional websites for small businesses.",
+      "We build and manage fast, professional websites for small businesses. Starting at $100/month.",
     siteName: "Website Upgraders",
+    url: "https://website-upgraders.vercel.app",
+    type: "website",
+    locale: "en_US",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Website Upgraders | Managed Websites for Small Businesses",
+    description:
+      "Professional websites built, deployed, and managed for small businesses. Starting at $100/month.",
   },
 };
 
