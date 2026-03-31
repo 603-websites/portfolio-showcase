@@ -8,7 +8,7 @@ import {
   TrendingUp,
   Activity,
 } from "lucide-react";
-import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
 import RevenueChart from "@/components/dev/RevenueChart";
 import { formatDatetime } from "@/lib/format";
 
@@ -18,7 +18,7 @@ export const metadata: Metadata = {
 };
 
 export default async function DevDashboard() {
-  const supabase = await createClient();
+  const supabase = createAdminClient();
 
   const [clientsRes, tasksRes, invoicesRes, activityRes] = await Promise.all([
     supabase

@@ -1,4 +1,4 @@
-import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
 import { AlertCircle, Calendar, Clock, Video, User, ExternalLink } from "lucide-react";
 import { formatDatetime } from "@/lib/format";
 import type { Metadata } from "next";
@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 const BOOKING_LINK = "https://calendar.google.com/calendar/appointments/schedules";
 
 export default async function CalendarPage() {
-  const supabase = await createClient();
+  const supabase = createAdminClient();
 
   const { data: appointments, error } = await supabase
     .from("appointments")

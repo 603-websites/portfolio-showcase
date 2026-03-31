@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft, ExternalLink, Mail, Phone } from "lucide-react";
-import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
 import { formatDate, formatCurrency } from "@/lib/format";
 import type { Metadata } from "next";
 
@@ -10,7 +10,7 @@ type Props = { params: Promise<{ id: string }> };
 // Item 4 — dynamic metadata
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { id } = await params;
-  const supabase = await createClient();
+  const supabase = createAdminClient();
   const { data } = await supabase
     .from("clients")
     .select("name")
@@ -26,7 +26,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function ClientDetailPage({ params }: Props) {
   const { id } = await params;
-  const supabase = await createClient();
+  const supabase = createAdminClient();
 
   const [clientRes, tasksRes, invoicesRes] = await Promise.all([
     supabase.from("clients").select("*").eq("id", id).single(),

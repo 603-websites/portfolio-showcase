@@ -1,4 +1,4 @@
-import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
 import { AlertCircle, BarChart3, Eye, Users, TrendingDown } from "lucide-react";
 import { formatDate } from "@/lib/format";
 import type { Metadata } from "next";
@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 };
 
 export default async function DevAnalyticsPage() {
-  const supabase = await createClient();
+  const supabase = createAdminClient();
 
   const { data: snapshots, error } = await supabase
     .from("analytics_snapshots")
