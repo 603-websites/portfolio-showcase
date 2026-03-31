@@ -63,7 +63,7 @@ export default function SignupPage() {
         options: {
           data: {
             full_name: name,
-            phone,
+            phone_number: phone,
             about,
             role: "client",
           },
