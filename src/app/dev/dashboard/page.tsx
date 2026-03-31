@@ -23,16 +23,12 @@ export default async function DevDashboard() {
   const [clientsRes, tasksRes, invoicesRes, activityRes] = await Promise.all([
     supabase
       .from("clients")
-      .select("id, name, plan, status, monthly_revenue, website_url")
-      // Item 12 — soft delete filter
-      .is("deleted_at", null),
+      .select("id, name, plan, status, monthly_revenue, website_url"),
     supabase.from("tasks").select("id, title, status, priority, due_date, client_id"),
     supabase
       .from("invoices")
       .select("amount_cents, invoice_date")
       .eq("status", "paid")
-      // Item 12 — soft delete filter
-      .is("deleted_at", null)
       .order("invoice_date"),
     supabase
       .from("activity_log")

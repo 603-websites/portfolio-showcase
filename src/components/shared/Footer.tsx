@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Github, Linkedin, Mail, Phone } from "lucide-react";
+import Logo from "@/components/shared/Logo";
 
 const navigation = [
   { label: "Home", href: "/" },
@@ -29,9 +30,9 @@ const team = [
     github: "https://github.com/Logan566C",
   },
   {
-    name: "Michael",
-    label: "Developer",
-    linkedin: null,
+    name: "Michael Sader",
+    label: "Co-Founder",
+    linkedin: "https://www.linkedin.com/in/michael-sader/",
     github: null,
   },
 ];
@@ -43,11 +44,7 @@ export default function Footer() {
         <div className="grid grid-cols-1 gap-12 sm:grid-cols-2 lg:grid-cols-4">
           {/* Brand */}
           <div className="space-y-4">
-            <Link href="/" className="text-2xl font-bold">
-              <span className="bg-gradient-to-r from-accent to-violet bg-clip-text text-transparent">
-                S&C
-              </span>
-            </Link>
+            <Logo />
             <p className="text-sm text-text-muted">
               Building and managing websites for small businesses.
             </p>
@@ -161,7 +158,7 @@ export default function Footer() {
       <div className="border-t border-dark-border">
         <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 px-6 py-6 sm:flex-row">
           <p className="text-xs text-text-dim">
-            &copy; 2026 Sader &amp; Carter Web Development. All rights reserved.
+            &copy; 2026 Website Upgraders. All rights reserved.
           </p>
           <div className="flex items-center gap-4">
             <Link

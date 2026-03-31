@@ -38,8 +38,6 @@ export default async function ClientDetailPage({ params }: Props) {
     supabase
       .from("invoices")
       .select("*")
-      // Item 12 — soft delete filter
-      .is("deleted_at", null)
       .eq("client_id", id)
       .order("invoice_date", { ascending: false }),
   ]);

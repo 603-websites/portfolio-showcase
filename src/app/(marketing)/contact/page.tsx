@@ -4,8 +4,8 @@ import ContactForm from "@/components/marketing/ContactForm";
 import SectionReveal from "@/components/marketing/SectionReveal";
 
 export const metadata: Metadata = {
-  title: "Contact — Website Upgraders",
-  description: "Get in touch with Website Upgraders for your next web project.",
+  title: "Contact | Website Upgraders",
+  description: "Get in touch with Website Upgraders. Free consultation for small business website design, development, and management.",
 };
 
 export default function ContactPage() {

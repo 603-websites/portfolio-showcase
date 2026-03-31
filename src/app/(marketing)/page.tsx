@@ -1,9 +1,33 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 
-// Item 4
 export const metadata: Metadata = {
-  title: "Website Upgraders | Managed Website Subscriptions",
+  title: "Website Upgraders | Managed Website Subscriptions for Small Businesses",
+  description:
+    "Professional websites built, deployed, and managed for small businesses. Hosting, SEO, and maintenance included. Starting at $100/month.",
+  alternates: {
+    canonical: "https://website-upgraders.vercel.app",
+  },
+};
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: "Website Upgraders",
+  url: "https://website-upgraders.vercel.app",
+  description:
+    "Professional managed website subscriptions for small businesses.",
+  founders: [
+    { "@type": "Person", name: "Louis Sader" },
+    { "@type": "Person", name: "Logan Carter" },
+    { "@type": "Person", name: "Michael Sader" },
+  ],
+  contactPoint: {
+    "@type": "ContactPoint",
+    email: "louissader42@gmail.com",
+    telephone: "+1-603-275-7513",
+    contactType: "sales",
+  },
 };
 import {
   Wrench,
@@ -88,6 +112,10 @@ const benefits = [
 export default function HomePage() {
   return (
     <div className="pt-20">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       {/* Hero */}
       <section className="max-w-6xl mx-auto px-4 pt-10 pb-6 md:pt-16 md:pb-8">
         <div className="max-w-3xl">

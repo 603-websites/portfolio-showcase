@@ -20,7 +20,7 @@ interface Client {
   website_url: string | null;
   next_billing_date: string | null;
   created_at: string;
-  deleted_at: string | null;
+
 }
 
 export default function ClientsPage() {
@@ -49,8 +49,6 @@ export default function ClientsPage() {
       const { data, error: fetchError } = await supabase
         .from("clients")
         .select("*")
-        // Item 12 — soft delete filter
-        .is("deleted_at", null)
         .order("created_at", { ascending: false });
 
       if (fetchError) {

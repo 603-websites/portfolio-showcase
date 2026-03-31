@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 import { Menu, X } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
 import { createClient } from "@/lib/supabase/client";
+import Logo from "@/components/shared/Logo";
 
 const navLinks = [
   { label: "Home", href: "/" },
@@ -72,11 +73,7 @@ export default function Navbar() {
     >
       <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
         {/* Logo */}
-        <Link href="/" className="text-2xl font-bold">
-          <span className="bg-gradient-to-r from-accent to-violet bg-clip-text text-transparent">
-            S&C
-          </span>
-        </Link>
+        <Logo />
 
         {/* Desktop links */}
         <div className="hidden items-center gap-8 md:flex">

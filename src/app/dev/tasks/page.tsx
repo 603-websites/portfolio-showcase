@@ -67,8 +67,7 @@ export default function TasksPage() {
 
       const [tasksRes, clientsRes] = await Promise.all([
         supabase.from("tasks").select("*").order("sort_order"),
-        // Item 12 — exclude soft-deleted clients from the name lookup
-        supabase.from("clients").select("id, name").is("deleted_at", null),
+        supabase.from("clients").select("id, name"),
       ]);
 
       if (tasksRes.error) {

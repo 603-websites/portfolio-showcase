@@ -5,9 +5,9 @@ import SectionReveal from "@/components/marketing/SectionReveal";
 import { pricingPlans, comparisonFeatures } from "@/data/pricing";
 
 export const metadata: Metadata = {
-  title: "Services & Pricing — Website Upgraders",
+  title: "Services & Pricing | Website Upgraders",
   description:
-    "Simple monthly plans for professional managed websites. Starting at $99/month.",
+    "Simple monthly plans for professional managed websites. Starting at $99/month with hosting, maintenance, and SEO included.",
 };
 
 const promises = [

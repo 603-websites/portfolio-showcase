@@ -52,14 +52,10 @@ export default function RevenuePage() {
       const [c, i] = await Promise.all([
         supabase
           .from("clients")
-          .select("id, name, plan, status, monthly_revenue")
-          // Item 12 — soft delete filter
-          .is("deleted_at", null),
+          .select("id, name, plan, status, monthly_revenue"),
         supabase
           .from("invoices")
           .select("*")
-          // Item 12
-          .is("deleted_at", null)
           .order("invoice_date"),
       ]);
 
