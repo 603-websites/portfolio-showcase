@@ -1,12 +1,14 @@
 import { createClient } from "@/lib/supabase/server";
-import { AlertCircle, Calendar, Clock, Video, User } from "lucide-react";
+import { AlertCircle, Calendar, Clock, Video, User, ExternalLink } from "lucide-react";
 import { formatDatetime } from "@/lib/format";
 import type { Metadata } from "next";
+import { NewAppointmentModal } from "./new-appointment-modal";
 
-// Item 4
 export const metadata: Metadata = {
-  title: "Calendar — Dev Portal | Website Upgraders",
+  title: "Calendar | Dev Portal | Website Upgraders",
 };
+
+const BOOKING_LINK = "https://calendar.google.com/calendar/appointments/schedules";
 
 export default async function CalendarPage() {
   const supabase = await createClient();
@@ -16,7 +18,11 @@ export default async function CalendarPage() {
     .select("*, clients(name)")
     .order("scheduled_at", { ascending: true });
 
-  // Item 1 — error state
+  const { data: clients } = await supabase
+    .from("clients")
+    .select("id, name")
+    .order("name", { ascending: true });
+
   if (error) {
     return (
       <div className="flex flex-col items-center justify-center h-64 gap-4">
@@ -42,20 +48,36 @@ export default async function CalendarPage() {
 
   return (
     <div className="space-y-8">
-      <div>
-        <h1 className="text-3xl font-bold">Calendar</h1>
-        <p className="text-text-muted mt-1">
-          {upcoming.length} upcoming meetings
-        </p>
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-3xl font-bold">Calendar</h1>
+          <p className="text-text-muted mt-1">
+            {upcoming.length} upcoming meetings
+          </p>
+        </div>
+        <div className="flex items-center gap-3">
+          <a
+            href={BOOKING_LINK}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-2 border border-dark-border rounded-lg px-4 py-2.5 text-sm font-medium text-text-muted hover:text-text hover:border-accent/50 transition"
+          >
+            <ExternalLink className="w-4 h-4" />
+            Google Calendar
+          </a>
+          <NewAppointmentModal clients={clients || []} />
+        </div>
       </div>
 
       <div>
         <h2 className="text-lg font-semibold mb-4">Upcoming</h2>
-        {/* Item 1 — empty state */}
         {upcoming.length === 0 ? (
           <div className="bg-dark-light border border-dark-border rounded-xl p-8 text-center space-y-3">
             <Calendar className="w-10 h-10 text-text-dim mx-auto" />
             <p className="text-text-dim">No upcoming meetings scheduled.</p>
+            <p className="text-text-dim text-sm">
+              Add meetings manually or share your booking link with clients.
+            </p>
           </div>
         ) : (
           <div className="space-y-3">
@@ -71,7 +93,6 @@ export default async function CalendarPage() {
                   <div>
                     <h3 className="text-text font-medium">{apt.title}</h3>
                     <div className="flex items-center gap-4 mt-1 text-sm text-text-muted">
-                      {/* Item 6 — local timezone */}
                       <span className="flex items-center gap-1">
                         <Clock className="w-3.5 h-3.5" />
                         {formatDatetime(apt.scheduled_at)}
@@ -113,7 +134,6 @@ export default async function CalendarPage() {
               >
                 <div>
                   <p className="text-text text-sm">{apt.title}</p>
-                  {/* Item 6 — local timezone */}
                   <p className="text-text-dim text-xs">
                     {formatDatetime(apt.scheduled_at)}
                     {apt.clients &&
