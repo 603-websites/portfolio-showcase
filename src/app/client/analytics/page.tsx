@@ -1,4 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
 import { AlertCircle, BarChart3, Eye, Users } from "lucide-react";
 import { formatDate } from "@/lib/format";
 import type { Metadata } from "next";
@@ -14,7 +15,8 @@ export default async function ClientAnalyticsPage() {
     data: { user },
   } = await supabase.auth.getUser();
 
-  const { data: cu, error: cuError } = await supabase
+  const adminSupabase = createAdminClient();
+  const { data: cu, error: cuError } = await adminSupabase
     .from("client_users")
     .select("client_id")
     .eq("user_id", user!.id)

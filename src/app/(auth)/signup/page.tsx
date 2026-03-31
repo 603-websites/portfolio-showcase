@@ -113,7 +113,7 @@ export default function SignupPage() {
       )}
 
       {/* Form */}
-      <form onSubmit={handleSubmit} className="space-y-4" autoComplete="off">
+      <form onSubmit={handleSubmit} className="space-y-4" autoComplete="on">
         <div>
           <label htmlFor="name" className="block text-sm font-medium text-text mb-1.5">
             Full Name

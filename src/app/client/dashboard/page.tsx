@@ -1,4 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
 import Link from "next/link";
 import { AlertCircle, ExternalLink, UtensilsCrossed, BarChart3, Calendar, CreditCard, Eye, Users, LayoutDashboard } from "lucide-react";
 import { formatDate } from "@/lib/format";
@@ -32,7 +33,8 @@ export default async function ClientDashboard() {
     );
   }
 
-  const { data: clientUser, error: clientError } = await supabase
+  const adminSupabase = createAdminClient();
+  const { data: clientUser, error: clientError } = await adminSupabase
     .from("client_users")
     .select(
       "clients(*, analytics_snapshots(page_views, unique_visitors, snapshot_date))"

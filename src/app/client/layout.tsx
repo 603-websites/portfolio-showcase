@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
 import ClientSidebar from "@/components/client/ClientSidebar";
 
 // Item 4 — base title; individual pages override this with their own metadata
@@ -23,7 +24,8 @@ export default async function ClientLayout({
   }
 
   // Get client info via junction table
-  const { data: clientUser } = await supabase
+  const adminSupabase = createAdminClient();
+  const { data: clientUser } = await adminSupabase
     .from("client_users")
     .select("clients(id, name, plan, website_url, status)")
     .eq("user_id", user.id)
