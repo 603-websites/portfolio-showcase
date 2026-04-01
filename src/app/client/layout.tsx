@@ -27,21 +27,22 @@ export default async function ClientLayout({
   const adminSupabase = createAdminClient();
   const { data: clientUser } = await adminSupabase
     .from("client_users")
-    .select("clients(id, name, plan, website_url, status)")
+    .select("clients(id, name, plan, website_url, status, type)")
     .eq("user_id", user.id)
     .single();
 
-  const client = (clientUser?.clients as unknown as { id: string; name: string; plan: string; website_url: string; status: string } | null) || {
+  const client = (clientUser?.clients as unknown as { id: string; name: string; plan: string; website_url: string; status: string; type: string } | null) || {
     id: "",
     name: user.email || "Client",
     plan: "starter",
     website_url: "",
     status: "active",
+    type: "restaurant",
   };
 
   return (
     <div className="min-h-screen bg-dark">
-      <ClientSidebar client={{ name: client.name, plan: client.plan }} />
+      <ClientSidebar client={{ name: client.name, plan: client.plan, type: client.type }} />
       <div className="lg:pl-64">
         <main className="p-6 md:p-8">{children}</main>
       </div>

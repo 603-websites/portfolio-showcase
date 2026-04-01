@@ -18,19 +18,34 @@ import {
   LogOut,
   Menu,
   X,
+  Sparkles,
+  Bell,
+  Wrench,
+  MapPin,
+  Tag,
 } from "lucide-react";
 
-const contentItems = [
+const restaurantContentItems = [
+  { href: "/client/content/hero", label: "Hero Section", icon: Sparkles },
   { href: "/client/content/menu", label: "Menu", icon: UtensilsCrossed },
   { href: "/client/content/hours", label: "Hours", icon: Clock },
-  { href: "/client/content/promotions", label: "Promotions", icon: Megaphone },
+  { href: "/client/content/announcements", label: "Announcements", icon: Bell },
+  { href: "/client/content/contact", label: "Contact Info", icon: Phone },
+];
+
+const hvacContentItems = [
+  { href: "/client/content/hero", label: "Hero Section", icon: Sparkles },
+  { href: "/client/content/services", label: "Services", icon: Wrench },
+  { href: "/client/content/service-areas", label: "Service Areas", icon: MapPin },
+  { href: "/client/content/hours", label: "Hours", icon: Clock },
+  { href: "/client/content/hvac-promotions", label: "Promotions", icon: Tag },
   { href: "/client/content/contact", label: "Contact Info", icon: Phone },
 ];
 
 export default function ClientSidebar({
   client,
 }: {
-  client: { name: string; plan: string };
+  client: { name: string; plan: string; type: string };
 }) {
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -107,7 +122,7 @@ export default function ClientSidebar({
         </button>
         {contentOpen && (
           <div className="pl-4 space-y-1">
-            {contentItems.map((item) => (
+            {(client.type === "hvac" ? hvacContentItems : restaurantContentItems).map((item) => (
               <Link
                 key={item.href}
                 href={item.href}
