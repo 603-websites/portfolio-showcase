@@ -1,8 +1,7 @@
 "use client";
 
-import { useEffect, useState, useCallback, useMemo } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { AlertCircle, Plus, SquareCheckBig } from "lucide-react";
-import { createClient } from "@/lib/supabase/client";
 import toast from "react-hot-toast";
 import { formatDate } from "@/lib/format";
 import SessionExpiredModal from "@/components/shared/SessionExpiredModal";
@@ -50,39 +49,20 @@ export default function TasksPage() {
   // Item 14 — search/filter state
   const [search, setSearch] = useState("");
 
-  const supabase = useMemo(() => createClient(), []);
-
   const fetchData = useCallback(async () => {
     try {
-      const {
-        data: { user },
-        error: authError,
-      } = await supabase.auth.getUser();
-
-      // Item 2 — session expiry
-      if (authError || !user) {
-        setSessionExpired(true);
-        setLoading(false);
-        return;
-      }
-
-      const [tasksRes, clientsRes] = await Promise.all([
-        supabase.from("tasks").select("*").order("sort_order"),
-        supabase.from("clients").select("id, name"),
-      ]);
-
-      if (tasksRes.error) {
-        setError("Failed to load tasks.");
-      } else {
-        setTasks(tasksRes.data || []);
-      }
-      setClients(clientsRes.data || []);
+      const res = await fetch("/api/dev/tasks");
+      if (res.status === 401) { setSessionExpired(true); setLoading(false); return; }
+      const data = await res.json();
+      if (!res.ok) { setError(data.error || "Failed to load tasks."); return; }
+      setTasks(data.tasks || []);
+      setClients(data.clients || []);
     } catch {
       setError("An unexpected error occurred.");
     } finally {
       setLoading(false);
     }
-  }, [supabase]);
+  }, []);
 
   useEffect(() => {
     fetchData();
@@ -92,22 +72,21 @@ export default function TasksPage() {
     const title = newTask[status]?.trim();
     if (!title) return;
 
-    const { data, error: insertError } = await supabase
-      .from("tasks")
-      .insert({ title, status, priority: "medium" })
-      .select()
-      .single();
+    const res = await fetch("/api/dev/tasks", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ title, status, priority: "medium" }),
+    });
+    const data = await res.json();
 
-    if (insertError) {
+    if (!res.ok) {
       toast.error("Failed to add task.");
       return;
     }
 
-    if (data) {
-      setTasks((prev) => [...prev, data]);
-      setNewTask((prev) => ({ ...prev, [status]: "" }));
-      toast.success("Task added.");
-    }
+    setTasks((prev) => [...prev, data]);
+    setNewTask((prev) => ({ ...prev, [status]: "" }));
+    toast.success("Task added.");
   };
 
   // Item 3 — optimistic update with rollback
@@ -120,17 +99,17 @@ export default function TasksPage() {
       prev.map((t) => (t.id === taskId ? { ...t, status: newStatus } : t))
     );
 
-    const { error: updateError } = await supabase
-      .from("tasks")
-      .update({ status: newStatus })
-      .eq("id", taskId);
+    const res = await fetch("/api/dev/tasks", {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id: taskId, status: newStatus }),
+    });
 
-    if (updateError) {
+    if (!res.ok) {
       // Rollback to previous state
       setTasks(previousTasks);
       toast.error("Failed to update task status. Change reverted.");
     } else {
-      // Item 9 — audit log (fire-and-forget via client; for full audit use server action)
       toast.success("Task moved.");
     }
   };

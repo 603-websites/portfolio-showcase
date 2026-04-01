@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { createClient } from "@/lib/supabase/client";
 import {
   AlertCircle,
   CreditCard,
@@ -48,58 +47,16 @@ export default function ClientBillingPage() {
   useEffect(() => {
     const load = async () => {
       try {
-        const supabase = createClient();
-        const {
-          data: { user },
-          error: authError,
-        } = await supabase.auth.getUser();
-
-        // Item 2 — session expiry detection
-        if (authError || !user) {
-          setSessionExpired(true);
+        const res = await fetch("/api/client/billing");
+        if (res.status === 401) { setSessionExpired(true); setLoading(false); return; }
+        const data = await res.json();
+        if (!res.ok) {
+          setError(data.error || "Failed to load billing data.");
           setLoading(false);
           return;
         }
-
-        const { data: cu, error: cuError } = await supabase
-          .from("client_users")
-          .select("client_id")
-          .eq("user_id", user.id)
-          .single();
-
-        if (cuError?.code === "PGRST301" || cuError?.message?.includes("JWT")) {
-          setSessionExpired(true);
-          setLoading(false);
-          return;
-        }
-
-        if (!cu) {
-          setError("No billing account found.");
-          setLoading(false);
-          return;
-        }
-
-        const [clientRes, invoicesRes] = await Promise.all([
-          supabase
-            .from("clients")
-            .select(
-              "plan, subscription_status, stripe_subscription_id, next_billing_date, monthly_revenue"
-            )
-            .eq("id", cu.client_id)
-            .single(),
-          supabase
-            .from("invoices")
-            .select("*")
-            .eq("client_id", cu.client_id)
-            .order("invoice_date", { ascending: false }),
-        ]);
-
-        if (clientRes.error) {
-          setError(clientRes.error.message);
-        } else {
-          setClient(clientRes.data);
-        }
-        setInvoices(invoicesRes.data || []);
+        setClient(data.client);
+        setInvoices(data.invoices || []);
       } catch {
         setError("An unexpected error occurred.");
       } finally {
