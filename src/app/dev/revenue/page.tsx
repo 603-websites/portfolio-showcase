@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import { AlertCircle, DollarSign, TrendingUp, Users, Loader2 } from "lucide-react";
-import { createClient } from "@/lib/supabase/client";
 import RevenueChart from "@/components/dev/RevenueChart";
 import { formatCurrency } from "@/lib/format";
 import SessionExpiredModal from "@/components/shared/SessionExpiredModal";
@@ -37,33 +36,12 @@ export default function RevenuePage() {
     setLoading(true);
     setError(null);
     try {
-      const supabase = createClient();
-      const {
-        data: { user },
-        error: authError,
-      } = await supabase.auth.getUser();
-
-      if (authError || !user) {
-        setSessionExpired(true);
-        setLoading(false);
-        return;
-      }
-
-      const [c, i] = await Promise.all([
-        supabase
-          .from("clients")
-          .select("id, name, plan, status, monthly_revenue"),
-        supabase
-          .from("invoices")
-          .select("*")
-          .order("invoice_date"),
-      ]);
-
-      if (c.error) throw c.error;
-      if (i.error) throw i.error;
-
-      setClients(c.data || []);
-      setInvoices(i.data || []);
+      const res = await fetch("/api/dev/revenue");
+      if (res.status === 401) { setSessionExpired(true); setLoading(false); return; }
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Failed to load revenue data.");
+      setClients(data.clients || []);
+      setInvoices(data.invoices || []);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to load revenue data.");
     } finally {

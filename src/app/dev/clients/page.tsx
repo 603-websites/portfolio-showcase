@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { AlertCircle, Plus, Search, Users, X, Loader2 } from "lucide-react";
-import { createClient } from "@/lib/supabase/client";
 import toast from "react-hot-toast";
 import { formatDate, formatCurrency } from "@/lib/format";
 import SessionExpiredModal from "@/components/shared/SessionExpiredModal";
@@ -33,28 +32,11 @@ export default function ClientsPage() {
 
   const fetchClients = async () => {
     try {
-      const supabase = createClient();
-      const {
-        data: { user },
-        error: authError,
-      } = await supabase.auth.getUser();
-
-      if (authError || !user) {
-        setSessionExpired(true);
-        setLoading(false);
-        return;
-      }
-
-      const { data, error: fetchError } = await supabase
-        .from("clients")
-        .select("*")
-        .order("created_at", { ascending: false });
-
-      if (fetchError) {
-        setError(fetchError.message);
-      } else {
-        setClients(data || []);
-      }
+      const res = await fetch("/api/dev/clients");
+      if (res.status === 401) { setSessionExpired(true); setLoading(false); return; }
+      const data = await res.json();
+      if (!res.ok) { setError(data.error || "Failed to load clients."); return; }
+      setClients(data || []);
     } catch {
       setError("An unexpected error occurred.");
     } finally {
@@ -292,20 +274,24 @@ function AddClientModal({
       return;
     }
     setLoading(true);
-    const supabase = createClient();
-    const { error: err } = await supabase.from("clients").insert({
-      name: form.name,
-      business_name: form.business_name || form.name,
-      email: form.email,
-      phone: form.phone || null,
-      plan: form.plan,
-      monthly_revenue: parseFloat(form.monthly_revenue) || 0,
-      website_url: form.website_url || null,
-      status: "active",
+    const res = await fetch("/api/dev/clients", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        name: form.name,
+        business_name: form.business_name || form.name,
+        email: form.email,
+        phone: form.phone || null,
+        plan: form.plan,
+        monthly_revenue: parseFloat(form.monthly_revenue) || 0,
+        website_url: form.website_url || null,
+        status: "active",
+      }),
     });
     setLoading(false);
-    if (err) {
-      setError(err.message);
+    const data = await res.json();
+    if (!res.ok) {
+      setError(data.error || "Failed to add client.");
     } else {
       onAdded();
     }
