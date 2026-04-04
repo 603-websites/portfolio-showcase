@@ -4,13 +4,33 @@ import ContactForm from "@/components/marketing/ContactForm";
 import SectionReveal from "@/components/marketing/SectionReveal";
 
 export const metadata: Metadata = {
-  title: "Contact | Website Upgraders",
-  description: "Get in touch with Website Upgraders. Free consultation for small business website design, development, and management.",
+  title: "Contact Us for a Free Consultation | Website Upgraders",
+  description: "Get in touch with Website Upgraders for a free website consultation. We help small businesses get online with professional managed websites.",
+};
+
+const localBusinessSchema = {
+  "@context": "https://schema.org",
+  "@type": "LocalBusiness",
+  name: "Website Upgraders",
+  url: "https://website-upgraders.vercel.app",
+  email: "louissader42@gmail.com",
+  telephone: "+1-603-275-7513",
+  description: "Professional managed website subscriptions for small businesses.",
+  areaServed: [
+    { "@type": "State", name: "New Hampshire" },
+    { "@type": "State", name: "Massachusetts" },
+    { "@type": "Country", name: "United States" },
+  ],
+  priceRange: "$99-$299/month",
 };
 
 export default function ContactPage() {
   return (
     <div className="pt-24 pb-20">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusinessSchema) }}
+      />
       <div className="max-w-6xl mx-auto px-4">
         <SectionReveal>
           <h1 className="text-4xl md:text-5xl font-bold mb-4">Get in Touch</h1>

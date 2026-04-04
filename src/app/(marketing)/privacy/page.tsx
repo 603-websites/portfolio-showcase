@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Privacy Policy | Website Upgraders",
-  description: "Privacy policy for Website Upgraders. Learn how we handle your data.",
+  description: "Read the Website Upgraders privacy policy. Learn how we collect, use, and protect your personal information when you use our services.",
 };
 
 export default function PrivacyPage() {

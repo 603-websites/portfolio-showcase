@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Our Projects | Website Upgraders",
+  title: "Our Portfolio | Websites We Have Built | Website Upgraders",
   description:
-    "Browse websites we have built and manage for small businesses. Portfolio sites, SaaS apps, and more.",
+    "See real websites we have built and manage for small businesses. Portfolio sites, business websites, and SaaS applications.",
 };
 
 export default function ProjectsLayout({

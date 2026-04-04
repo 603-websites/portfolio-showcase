@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { notFound } from "next/navigation";
 import { Check, ArrowLeft, ExternalLink, Github } from "lucide-react";
 import { projects } from "@/data/projects";
@@ -16,7 +17,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!project) return {};
   return {
     title: `${project.title} | Projects | Website Upgraders`,
-    description: project.description,
+    description: `${project.description} Built and managed by Website Upgraders.`,
   };
 }
 
@@ -36,12 +37,13 @@ export default async function ProjectDetailPage({ params }: Props) {
         </Link>
 
         {/* Hero */}
-        <div className="rounded-2xl overflow-hidden mb-12 aspect-video bg-dark-light">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
+        <div className="rounded-2xl overflow-hidden mb-12 aspect-video bg-dark-light relative">
+          <Image
             src={project.image}
             alt={project.title}
-            className="w-full h-full object-cover"
+            fill
+            className="object-cover"
+            sizes="(max-width: 768px) 100vw, 1152px"
           />
         </div>
 

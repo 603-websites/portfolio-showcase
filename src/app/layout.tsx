@@ -14,7 +14,7 @@ export const metadata: Metadata = {
   ),
   title: "Website Upgraders | Managed Website Subscriptions",
   description:
-    "Professional managed website subscriptions for small businesses in New England and beyond.",
+    "Professional managed website subscriptions for small businesses. Website design, hosting, SEO, and maintenance starting at $99/month.",
   openGraph: {
     title: "Website Upgraders | Managed Websites for Small Businesses",
     description:

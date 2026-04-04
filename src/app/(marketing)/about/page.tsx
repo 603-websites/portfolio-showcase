@@ -5,9 +5,9 @@ import TeamCard from "@/components/marketing/TeamCard";
 import SectionReveal from "@/components/marketing/SectionReveal";
 
 export const metadata: Metadata = {
-  title: "About | Website Upgraders",
+  title: "Meet Our Team | Website Upgraders",
   description:
-    "Meet the team behind Website Upgraders. We build and manage professional websites for small businesses.",
+    "Meet the founders behind Website Upgraders. We design, build, and manage professional websites for small businesses across New England and beyond.",
 };
 
 const team = [
@@ -36,9 +36,28 @@ const team = [
   },
 ];
 
+const teamSchema = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: "Website Upgraders",
+  url: "https://website-upgraders.vercel.app",
+  member: team.map((member) => ({
+    "@type": "Person",
+    name: member.name,
+    jobTitle: member.title,
+    description: member.bio,
+    image: `https://website-upgraders.vercel.app${member.image}`,
+    ...(member.linkedinUrl && { sameAs: [member.linkedinUrl, ...(member.githubUrl ? [member.githubUrl] : [])] }),
+  })),
+};
+
 export default function AboutPage() {
   return (
     <div className="pt-24 pb-20">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(teamSchema) }}
+      />
       <div className="max-w-6xl mx-auto px-4">
         <SectionReveal>
           <div className="text-center max-w-3xl mx-auto mb-20">

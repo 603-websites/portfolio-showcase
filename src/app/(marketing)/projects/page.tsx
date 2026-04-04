@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { projects } from "@/data/projects";
 import SectionReveal from "@/components/marketing/SectionReveal";
@@ -61,11 +62,12 @@ export default function ProjectsPage() {
                 className="bg-dark-light border border-dark-border rounded-2xl overflow-hidden cursor-pointer hover:-translate-y-1 transition-transform"
               >
                 <div className="aspect-video bg-dark-lighter relative">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
+                  <Image
                     src={project.image}
                     alt={project.title}
-                    className="w-full h-full object-cover"
+                    fill
+                    className="object-cover"
+                    sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
                   />
                   <span className="absolute top-3 right-3 bg-dark/80 text-text-muted text-xs px-2 py-1 rounded-full">
                     {project.category}

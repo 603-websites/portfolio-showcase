@@ -5,9 +5,9 @@ import SectionReveal from "@/components/marketing/SectionReveal";
 import { pricingPlans, comparisonFeatures } from "@/data/pricing";
 
 export const metadata: Metadata = {
-  title: "Services & Pricing | Website Upgraders",
+  title: "Website Plans & Pricing | Website Upgraders",
   description:
-    "Simple monthly plans for professional managed websites. Starting at $99/month with hosting, maintenance, and SEO included.",
+    "Affordable managed website plans starting at $99/month. Includes design, hosting, SEO, and ongoing maintenance. No contracts, cancel anytime.",
 };
 
 const promises = [
@@ -28,9 +28,36 @@ const promises = [
   },
 ];
 
+const serviceSchema = {
+  "@context": "https://schema.org",
+  "@type": "Service",
+  name: "Managed Website Subscriptions",
+  provider: {
+    "@type": "Organization",
+    name: "Website Upgraders",
+    url: "https://website-upgraders.vercel.app",
+  },
+  description: "Professional website design, hosting, SEO, and maintenance for small businesses.",
+  areaServed: {
+    "@type": "Country",
+    name: "United States",
+  },
+  offers: {
+    "@type": "AggregateOffer",
+    priceCurrency: "USD",
+    lowPrice: "99",
+    highPrice: "299",
+    offerCount: "3",
+  },
+};
+
 export default function ServicesPage() {
   return (
     <div className="pt-24 pb-20">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceSchema) }}
+      />
       <div className="max-w-6xl mx-auto px-4">
         <SectionReveal>
           <div className="text-center max-w-3xl mx-auto mb-20">

@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Terms of Service | Website Upgraders",
-  description: "Terms of service for Website Upgraders managed website subscriptions.",
+  description: "Website Upgraders terms of service. Read our policies on managed website subscriptions, payments, cancellations, and service agreements.",
 };
 
 export default function TermsPage() {

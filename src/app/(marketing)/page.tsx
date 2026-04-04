@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "Website Upgraders | Managed Website Subscriptions for Small Businesses",
+  title: "Managed Website Subscriptions for Small Businesses | Website Upgraders",
   description:
     "Professional websites built, deployed, and managed for small businesses. Hosting, SEO, and maintenance included. Starting at $100/month.",
   alternates: {
@@ -48,6 +48,19 @@ import FAQAccordion from "@/components/marketing/FAQAccordion";
 import { projects } from "@/data/projects";
 import { faqItems } from "@/data/faq";
 import { pricingPlans } from "@/data/pricing";
+
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: faqItems.map((item) => ({
+    "@type": "Question",
+    name: item.question,
+    acceptedAnswer: {
+      "@type": "Answer",
+      text: item.answer,
+    },
+  })),
+};
 
 const steps = [
   {
@@ -115,6 +128,10 @@ export default function HomePage() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
       {/* Hero */}
       <section className="max-w-6xl mx-auto px-4 pt-10 pb-6 md:pt-16 md:pb-8">
