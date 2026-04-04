@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, Suspense } from "react";
+import { useSearchParams, useRouter } from "next/navigation";
 import { AlertCircle, Plus, SquareCheckBig } from "lucide-react";
 import toast from "react-hot-toast";
 import { formatDate } from "@/lib/format";
@@ -38,7 +39,9 @@ const PRIORITY_COLORS: Record<string, string> = {
   low: "bg-dark-lighter text-text-dim",
 };
 
-export default function TasksPage() {
+function TasksPageContent() {
+  const searchParams = useSearchParams();
+  const router = useRouter();
   const [tasks, setTasks] = useState<Task[]>([]);
   const [clients, setClients] = useState<ClientRef[]>([]);
   const [loading, setLoading] = useState(true);
@@ -46,8 +49,14 @@ export default function TasksPage() {
   const [sessionExpired, setSessionExpired] = useState(false);
   const [newTask, setNewTask] = useState<Record<string, string>>({});
   const [draggedTask, setDraggedTask] = useState<string | null>(null);
-  // Item 14 — search/filter state
-  const [search, setSearch] = useState("");
+  // Item 6 — search/filter state persisted in URL
+  const search = searchParams.get("q") || "";
+  const setSearch = (val: string) => {
+    const params = new URLSearchParams(searchParams.toString());
+    if (val) params.set("q", val);
+    else params.delete("q");
+    router.replace(`?${params.toString()}`, { scroll: false });
+  };
 
   const fetchData = useCallback(async () => {
     try {
@@ -301,5 +310,13 @@ export default function TasksPage() {
         })}
       </div>
     </div>
+  );
+}
+
+export default function TasksPage() {
+  return (
+    <Suspense>
+      <TasksPageContent />
+    </Suspense>
   );
 }

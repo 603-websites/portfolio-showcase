@@ -3,12 +3,13 @@ import { AlertCircle, Calendar, Clock, Video, User, ExternalLink } from "lucide-
 import { formatDatetime } from "@/lib/format";
 import type { Metadata } from "next";
 import { NewAppointmentModal } from "./new-appointment-modal";
+import { AppointmentActions } from "./appointment-actions";
 
 export const metadata: Metadata = {
   title: "Calendar | Dev Portal | Website Upgraders",
 };
 
-const BOOKING_LINK = "https://calendar.google.com/calendar/appointments/schedules";
+const BOOKING_LINK = process.env.NEXT_PUBLIC_BOOKING_LINK || "https://calendar.google.com/calendar/appointments/schedules";
 
 export default async function CalendarPage() {
   const supabase = createAdminClient();
@@ -107,16 +108,30 @@ export default async function CalendarPage() {
                     </div>
                   </div>
                 </div>
-                {apt.meeting_url && (
-                  <a
-                    href={apt.meeting_url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center gap-2 text-sm text-accent hover:underline"
-                  >
-                    <Video className="w-4 h-4" /> Join
-                  </a>
-                )}
+                <div className="flex items-center gap-3">
+                  {apt.meeting_url && (
+                    <a
+                      href={apt.meeting_url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-2 text-sm text-accent hover:underline"
+                    >
+                      <Video className="w-4 h-4" /> Join
+                    </a>
+                  )}
+                  <AppointmentActions
+                    appointment={{
+                      id: apt.id,
+                      title: apt.title,
+                      scheduled_at: apt.scheduled_at,
+                      duration_minutes: apt.duration_minutes,
+                      meeting_url: apt.meeting_url,
+                      status: apt.status,
+                      client_id: apt.client_id,
+                    }}
+                    clients={clients || []}
+                  />
+                </div>
               </div>
             ))}
           </div>
