@@ -63,6 +63,59 @@ export async function GET() {
 }
 
 /**
+ * PATCH /api/appointments
+ * Updates an existing appointment (dev only).
+ */
+export async function PATCH(request: Request) {
+  try {
+    const supabase = await createClient();
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user || user.user_metadata?.role !== "dev") {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    const { id, ...updates } = await request.json();
+    if (!id) return NextResponse.json({ error: "id is required" }, { status: 400 });
+
+    const { createAdminClient } = await import("@/lib/supabase/admin");
+    const admin = createAdminClient();
+    const { data, error } = await admin.from("appointments").update(updates).eq("id", id).select().single();
+    if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+    return NextResponse.json(data);
+  } catch (err) {
+    console.error("[appointments] PATCH error:", err);
+    return NextResponse.json({ error: "Failed to update appointment" }, { status: 500 });
+  }
+}
+
+/**
+ * DELETE /api/appointments
+ * Deletes an appointment (dev only).
+ */
+export async function DELETE(request: Request) {
+  try {
+    const supabase = await createClient();
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user || user.user_metadata?.role !== "dev") {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    const { searchParams } = new URL(request.url);
+    const id = searchParams.get("id");
+    if (!id) return NextResponse.json({ error: "id is required" }, { status: 400 });
+
+    const { createAdminClient } = await import("@/lib/supabase/admin");
+    const admin = createAdminClient();
+    const { error } = await admin.from("appointments").delete().eq("id", id);
+    if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+    return NextResponse.json({ success: true });
+  } catch (err) {
+    console.error("[appointments] DELETE error:", err);
+    return NextResponse.json({ error: "Failed to delete appointment" }, { status: 500 });
+  }
+}
+
+/**
  * POST /api/appointments
  * Creates a new appointment (dev only).
  */
