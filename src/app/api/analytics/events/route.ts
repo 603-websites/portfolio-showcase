@@ -1,6 +1,29 @@
 import { NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 
+// In-memory rate limiting (per serverless instance)
+const rateLimit = new Map<string, { count: number; resetAt: number }>();
+const RATE_LIMIT = 100;
+const WINDOW_MS = 60_000;
+
+function cleanupRateLimit() {
+  const now = Date.now();
+  for (const [key, value] of rateLimit) {
+    if (now > value.resetAt) rateLimit.delete(key);
+  }
+}
+
+function isRateLimited(ip: string): boolean {
+  const now = Date.now();
+  const entry = rateLimit.get(ip);
+  if (!entry || now > entry.resetAt) {
+    rateLimit.set(ip, { count: 1, resetAt: now + WINDOW_MS });
+    return false;
+  }
+  entry.count++;
+  return entry.count > RATE_LIMIT;
+}
+
 /**
  * POST /api/analytics/events
  * Public endpoint for ingesting analytics events from client websites.
@@ -8,6 +31,19 @@ import { createAdminClient } from "@/lib/supabase/admin";
  */
 export async function POST(request: Request) {
   try {
+    // Rate limit by IP
+    const forwarded = request.headers.get("x-forwarded-for");
+    const ip = forwarded?.split(",")[0]?.trim() || "unknown";
+
+    // Periodically clean up expired entries
+    if (rateLimit.size > 10_000) cleanupRateLimit();
+
+    if (isRateLimited(ip)) {
+      return NextResponse.json({ error: "Too many requests" }, {
+        status: 429,
+        headers: { "Access-Control-Allow-Origin": "*" },
+      });
+    }
     const body = await request.json();
     const { clientId, sessionId, eventType, eventName, properties, userAgent } = body;
 
@@ -27,10 +63,6 @@ export async function POST(request: Request) {
     if (!client) {
       return NextResponse.json({ error: "Invalid client" }, { status: 403 });
     }
-
-    // Get IP from headers
-    const forwarded = request.headers.get("x-forwarded-for");
-    const ip = forwarded?.split(",")[0]?.trim() || null;
 
     await supabase.from("analytics_events").insert({
       client_id: clientId,

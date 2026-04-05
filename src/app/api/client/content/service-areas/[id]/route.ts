@@ -52,7 +52,7 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ id
     .select()
     .single();
 
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+  if (error) { console.error(error.message); return NextResponse.json({ error: "Operation failed" }, { status: 500 }); }
 
   await logAudit("service_area_updated", "hvac_service_area", id, user.id, {
     old: { label: existing.label, sort_order: existing.sort_order },
@@ -73,7 +73,7 @@ export async function DELETE(_: Request, { params }: { params: Promise<{ id: str
   const { id } = await params;
   const admin = createAdminClient();
   const { error } = await admin.from("hvac_service_areas").delete().eq("id", id).eq("client_id", clientId);
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+  if (error) { console.error(error.message); return NextResponse.json({ error: "Operation failed" }, { status: 500 }); }
 
   await logAudit("service_area_deleted", "hvac_service_area", id, user.id);
 

@@ -5,8 +5,6 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { Loader2, Check } from "lucide-react";
-import { createClient } from "@/lib/supabase/client";
-
 
 export default function SignupPage() {
   const router = useRouter();
@@ -56,22 +54,17 @@ export default function SignupPage() {
         return;
       }
 
-      const supabase = createClient();
-      const { error: signUpError } = await supabase.auth.signUp({
-        email,
-        password,
-        options: {
-          data: {
-            full_name: name,
-            phone_number: phone,
-            about,
-            role: "client",
-          },
-        },
+      // Server-side signup to prevent role escalation via user_metadata
+      const res = await fetch("/api/auth/signup", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password, name, phone, about }),
       });
 
-      if (signUpError) {
-        setError(signUpError.message);
+      const data = await res.json();
+
+      if (!res.ok) {
+        setError(data.error || "Signup failed. Please try again.");
         return;
       }
 

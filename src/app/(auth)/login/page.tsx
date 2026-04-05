@@ -48,7 +48,7 @@ export default function LoginPage() {
         return;
       }
 
-      const role = data.user?.user_metadata?.role;
+      const role = data.user?.app_metadata?.role || data.user?.user_metadata?.role;
       router.push(role === "dev" ? "/dev/dashboard" : "/client/dashboard");
     } catch {
       setError("An unexpected error occurred. Please try again.");

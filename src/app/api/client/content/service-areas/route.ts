@@ -19,7 +19,7 @@ export async function GET() {
 
   const admin = createAdminClient();
   const { data, error } = await admin.from("hvac_service_areas").select("*").eq("client_id", clientId).order("sort_order");
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+  if (error) { console.error(error.message); return NextResponse.json({ error: "Operation failed" }, { status: 500 }); }
   return NextResponse.json(data);
 }
 
@@ -32,8 +32,15 @@ export async function POST(request: Request) {
   if (!clientId) return NextResponse.json({ error: "Client not found" }, { status: 404 });
 
   const body = await request.json();
+
+  const allowedFields = ["label", "sort_order"];
+  const filtered: Record<string, unknown> = {};
+  for (const key of allowedFields) {
+    if (key in body) filtered[key] = body[key];
+  }
+
   const admin = createAdminClient();
-  const { data, error } = await admin.from("hvac_service_areas").insert({ ...body, client_id: clientId }).select().single();
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+  const { data, error } = await admin.from("hvac_service_areas").insert({ ...filtered, client_id: clientId }).select().single();
+  if (error) { console.error(error.message); return NextResponse.json({ error: "Operation failed" }, { status: 500 }); }
   return NextResponse.json(data);
 }

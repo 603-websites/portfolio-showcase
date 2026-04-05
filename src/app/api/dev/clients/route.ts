@@ -1,12 +1,13 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { isDev } from "@/lib/auth-utils";
 
 export async function GET() {
   // Verify the requester is a dev user
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
-  if (!user || user.user_metadata?.role !== "dev") {
+  if (!user || !isDev(user)) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
@@ -16,14 +17,17 @@ export async function GET() {
     .select("*")
     .order("created_at", { ascending: false });
 
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+  if (error) {
+    console.error("[dev/clients] GET error:", error.message);
+    return NextResponse.json({ error: "Failed to fetch clients" }, { status: 500 });
+  }
   return NextResponse.json(data);
 }
 
 export async function POST(request: Request) {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
-  if (!user || user.user_metadata?.role !== "dev") {
+  if (!user || !isDev(user)) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
@@ -32,6 +36,9 @@ export async function POST(request: Request) {
   const admin = createAdminClient();
   const { data, error } = await admin.from("clients").insert({ name, plan, website_url, status, type }).select().single();
 
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+  if (error) {
+    console.error("[dev/clients] POST error:", error.message);
+    return NextResponse.json({ error: "Failed to create client" }, { status: 500 });
+  }
   return NextResponse.json(data);
 }

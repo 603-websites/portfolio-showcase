@@ -1,14 +1,15 @@
 import { NextResponse } from "next/server";
-import { createAdminClient } from "@/lib/supabase/admin";
+import { createClient } from "@/lib/supabase/server";
 
 // Public endpoint — no auth required.
 // Client sites call this to fetch all published content.
+// Uses regular client (not admin) so RLS policies apply.
 export async function GET(_: Request, { params }: { params: Promise<{ clientId: string }> }) {
   const { clientId } = await params;
-  const admin = createAdminClient();
+  const supabase = await createClient();
 
   // Fetch client type
-  const { data: client, error: clientError } = await admin
+  const { data: client, error: clientError } = await supabase
     .from("clients")
     .select("id, name, type")
     .eq("id", clientId)
@@ -19,7 +20,7 @@ export async function GET(_: Request, { params }: { params: Promise<{ clientId: 
   }
 
   // Fetch all website_content rows for this client
-  const { data: contentRows } = await admin
+  const { data: contentRows } = await supabase
     .from("website_content")
     .select("content_type, content")
     .eq("client_id", clientId);
@@ -30,7 +31,7 @@ export async function GET(_: Request, { params }: { params: Promise<{ clientId: 
   }
 
   if (client.type === "restaurant") {
-    const { data: announcements } = await admin
+    const { data: announcements } = await supabase
       .from("announcements")
       .select("id, text, active, expires_at")
       .eq("client_id", clientId)
@@ -50,9 +51,9 @@ export async function GET(_: Request, { params }: { params: Promise<{ clientId: 
 
   // HVAC
   const [servicesRes, areasRes, promotionsRes] = await Promise.all([
-    admin.from("hvac_services").select("id, name, description, price_display").eq("client_id", clientId).order("sort_order"),
-    admin.from("hvac_service_areas").select("id, label").eq("client_id", clientId).order("sort_order"),
-    admin.from("hvac_promotions").select("id, title, description, discount_text, expires_at").eq("client_id", clientId).eq("active", true).order("sort_order"),
+    supabase.from("hvac_services").select("id, name, description, price_display").eq("client_id", clientId).order("sort_order"),
+    supabase.from("hvac_service_areas").select("id, label").eq("client_id", clientId).order("sort_order"),
+    supabase.from("hvac_promotions").select("id, title, description, discount_text, expires_at").eq("client_id", clientId).eq("active", true).order("sort_order"),
   ]);
 
   return NextResponse.json({

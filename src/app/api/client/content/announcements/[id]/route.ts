@@ -19,9 +19,16 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ id
 
   const { id } = await params;
   const body = await request.json();
+
+  const allowedFields = ["title", "content", "is_active", "sort_order"];
+  const filtered: Record<string, unknown> = {};
+  for (const key of allowedFields) {
+    if (key in body) filtered[key] = body[key];
+  }
+
   const admin = createAdminClient();
-  const { data, error } = await admin.from("announcements").update(body).eq("id", id).eq("client_id", clientId).select().single();
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+  const { data, error } = await admin.from("announcements").update(filtered).eq("id", id).eq("client_id", clientId).select().single();
+  if (error) { console.error(error.message); return NextResponse.json({ error: "Operation failed" }, { status: 500 }); }
   return NextResponse.json(data);
 }
 
@@ -36,6 +43,6 @@ export async function DELETE(_: Request, { params }: { params: Promise<{ id: str
   const { id } = await params;
   const admin = createAdminClient();
   const { error } = await admin.from("announcements").delete().eq("id", id).eq("client_id", clientId);
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+  if (error) { console.error(error.message); return NextResponse.json({ error: "Operation failed" }, { status: 500 }); }
   return NextResponse.json({ success: true });
 }

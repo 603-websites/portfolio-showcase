@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { isDev as checkIsDev } from "@/lib/auth-utils";
 
 /**
  * GET /api/appointments
@@ -17,7 +18,7 @@ export async function GET() {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const isDev = user.user_metadata?.role === "dev";
+    const isDev = checkIsDev(user);
 
     if (isDev) {
       const { data, error } = await supabase
@@ -26,7 +27,8 @@ export async function GET() {
         .order("scheduled_at", { ascending: true });
 
       if (error) {
-        return NextResponse.json({ error: error.message }, { status: 500 });
+        console.error("[appointments] GET dev query error:", error.message);
+        return NextResponse.json({ error: "Failed to fetch appointments" }, { status: 500 });
       }
       return NextResponse.json(data);
     }
@@ -51,7 +53,8 @@ export async function GET() {
       .order("scheduled_at", { ascending: true });
 
     if (error) {
-      return NextResponse.json({ error: error.message }, { status: 500 });
+      console.error("[appointments] GET client query error:", error.message);
+      return NextResponse.json({ error: "Failed to fetch appointments" }, { status: 500 });
     }
     return NextResponse.json(data);
   } catch (err) {
@@ -71,16 +74,25 @@ export async function PATCH(request: Request) {
   try {
     const supabase = await createClient();
     const { data: { user } } = await supabase.auth.getUser();
-    if (!user || user.user_metadata?.role !== "dev") {
+    if (!user || !checkIsDev(user)) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
     const { id, ...updates } = await request.json();
     if (!id) return NextResponse.json({ error: "id is required" }, { status: 400 });
 
+    const allowedFields = ["title", "scheduled_at", "duration_minutes", "notes", "status", "location"];
+    const filtered: Record<string, unknown> = {};
+    for (const key of allowedFields) {
+      if (key in updates) filtered[key] = updates[key];
+    }
+
     const admin = createAdminClient();
-    const { data, error } = await admin.from("appointments").update(updates).eq("id", id).select().single();
-    if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+    const { data, error } = await admin.from("appointments").update(filtered).eq("id", id).select().single();
+    if (error) {
+      console.error("[appointments] PATCH query error:", error.message);
+      return NextResponse.json({ error: "Failed to update appointment" }, { status: 500 });
+    }
     return NextResponse.json(data);
   } catch (err) {
     console.error("[appointments] PATCH error:", err);
@@ -96,7 +108,7 @@ export async function DELETE(request: Request) {
   try {
     const supabase = await createClient();
     const { data: { user } } = await supabase.auth.getUser();
-    if (!user || user.user_metadata?.role !== "dev") {
+    if (!user || !checkIsDev(user)) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
@@ -106,7 +118,10 @@ export async function DELETE(request: Request) {
 
     const admin = createAdminClient();
     const { error } = await admin.from("appointments").delete().eq("id", id);
-    if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+    if (error) {
+      console.error("[appointments] DELETE query error:", error.message);
+      return NextResponse.json({ error: "Failed to delete appointment" }, { status: 500 });
+    }
     return NextResponse.json({ success: true });
   } catch (err) {
     console.error("[appointments] DELETE error:", err);
@@ -125,7 +140,7 @@ export async function POST(request: Request) {
       data: { user },
     } = await supabase.auth.getUser();
 
-    if (!user || user.user_metadata?.role !== "dev") {
+    if (!user || !checkIsDev(user)) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
@@ -161,7 +176,8 @@ export async function POST(request: Request) {
       .single();
 
     if (error) {
-      return NextResponse.json({ error: error.message }, { status: 500 });
+      console.error("[appointments] POST query error:", error.message);
+      return NextResponse.json({ error: "Failed to create appointment" }, { status: 500 });
     }
 
     return NextResponse.json(appointment, { status: 201 });

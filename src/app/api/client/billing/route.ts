@@ -24,7 +24,10 @@ export async function GET() {
     admin.from("invoices").select("*").eq("client_id", cu.client_id).order("invoice_date", { ascending: false }),
   ]);
 
-  if (clientRes.error) return NextResponse.json({ error: clientRes.error.message }, { status: 500 });
+  if (clientRes.error) {
+    console.error("[billing] GET error:", clientRes.error.message);
+    return NextResponse.json({ error: "Failed to fetch billing information" }, { status: 500 });
+  }
 
   return NextResponse.json({ client: clientRes.data, invoices: invoicesRes.data || [] });
 }

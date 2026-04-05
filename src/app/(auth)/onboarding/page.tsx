@@ -15,7 +15,8 @@ export default function OnboardingPage() {
     const checkRole = async () => {
       const supabase = createClient();
       const { data: { user } } = await supabase.auth.getUser();
-      if (user?.user_metadata?.role === "dev") {
+      const role = user?.app_metadata?.role || user?.user_metadata?.role;
+      if (role === "dev") {
         router.replace("/dev/dashboard");
       }
     };

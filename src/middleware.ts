@@ -29,21 +29,28 @@ export async function middleware(request: NextRequest) {
   const {
     data: { user },
   } = await supabase.auth.getUser();
-  const role = user?.user_metadata?.role;
+
+  // SECURITY: app_metadata.role is the authoritative source of truth.
+  // It can only be set by the service_role key (admin API), not by users.
+  // We fall back to user_metadata.role for backward compat with accounts
+  // created before the migration to app_metadata.
+  const ALLOWED_ROLES = ["client", "dev"];
+  const rawRole = user?.app_metadata?.role || user?.user_metadata?.role;
+  const sanitizedRole = ALLOWED_ROLES.includes(rawRole) ? rawRole : null;
 
   // Protect dev routes
-  if (pathname.startsWith("/dev") && (!user || role !== "dev")) {
+  if (pathname.startsWith("/dev") && (!user || sanitizedRole !== "dev")) {
     return NextResponse.redirect(new URL("/login", request.url));
   }
 
   // Protect client routes
-  if (pathname.startsWith("/client") && (!user || role !== "client")) {
+  if (pathname.startsWith("/client") && (!user || sanitizedRole !== "client")) {
     return NextResponse.redirect(new URL("/login", request.url));
   }
 
   // Redirect authenticated users away from auth pages
   if (user && (pathname === "/login" || pathname === "/signup")) {
-    const dest = role === "dev" ? "/dev/dashboard" : "/client/dashboard";
+    const dest = sanitizedRole === "dev" ? "/dev/dashboard" : "/client/dashboard";
     return NextResponse.redirect(new URL(dest, request.url));
   }
 

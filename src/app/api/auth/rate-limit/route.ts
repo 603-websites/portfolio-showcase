@@ -41,7 +41,7 @@ export async function POST(request: Request) {
 
     return NextResponse.json({ allowed: true });
   } catch {
-    // Fail open: don't block auth if rate limiting itself errors
-    return NextResponse.json({ allowed: true });
+    // Fail closed: block requests if rate limiting itself errors
+    return NextResponse.json({ allowed: false });
   }
 }

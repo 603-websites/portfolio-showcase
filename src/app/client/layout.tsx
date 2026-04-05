@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { isClient } from "@/lib/auth-utils";
 import ClientSidebar from "@/components/client/ClientSidebar";
 
 // Item 4 — base title; individual pages override this with their own metadata
@@ -19,7 +20,7 @@ export default async function ClientLayout({
     data: { user },
   } = await supabase.auth.getUser();
 
-  if (!user || user.user_metadata?.role !== "client") {
+  if (!user || !isClient(user)) {
     redirect("/login");
   }
 

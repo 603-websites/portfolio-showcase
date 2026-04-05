@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
+import { isDev } from "@/lib/auth-utils";
 import DevSidebar from "@/components/dev/DevSidebar";
 
 // Item 4 — base title for dev portal; individual pages override
@@ -18,7 +19,7 @@ export default async function DevLayout({
     data: { user },
   } = await supabase.auth.getUser();
 
-  if (!user || user.user_metadata?.role !== "dev") {
+  if (!user || !isDev(user)) {
     redirect("/login");
   }
 
