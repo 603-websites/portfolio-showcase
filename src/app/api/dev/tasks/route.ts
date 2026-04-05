@@ -41,9 +41,9 @@ export async function PATCH(request: Request) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const { id, ...updates } = await request.json();
+  const { id, status, priority, title, due_date, client_id } = await request.json();
   const admin = createAdminClient();
-  const { data, error } = await admin.from("tasks").update(updates).eq("id", id).select().single();
+  const { data, error } = await admin.from("tasks").update({ status, priority, title, due_date, client_id }).eq("id", id).select().single();
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
   return NextResponse.json(data);
 }

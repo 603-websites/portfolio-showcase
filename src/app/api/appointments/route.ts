@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
 
 /**
  * GET /api/appointments
@@ -77,7 +78,6 @@ export async function PATCH(request: Request) {
     const { id, ...updates } = await request.json();
     if (!id) return NextResponse.json({ error: "id is required" }, { status: 400 });
 
-    const { createAdminClient } = await import("@/lib/supabase/admin");
     const admin = createAdminClient();
     const { data, error } = await admin.from("appointments").update(updates).eq("id", id).select().single();
     if (error) return NextResponse.json({ error: error.message }, { status: 500 });
@@ -104,7 +104,6 @@ export async function DELETE(request: Request) {
     const id = searchParams.get("id");
     if (!id) return NextResponse.json({ error: "id is required" }, { status: 400 });
 
-    const { createAdminClient } = await import("@/lib/supabase/admin");
     const admin = createAdminClient();
     const { error } = await admin.from("appointments").delete().eq("id", id);
     if (error) return NextResponse.json({ error: error.message }, { status: 500 });
@@ -147,7 +146,8 @@ export async function POST(request: Request) {
       );
     }
 
-    const { data: appointment, error } = await supabase
+    const admin = createAdminClient();
+    const { data: appointment, error } = await admin
       .from("appointments")
       .insert({
         title,

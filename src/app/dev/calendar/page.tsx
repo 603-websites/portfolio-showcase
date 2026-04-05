@@ -145,7 +145,7 @@ export default async function CalendarPage() {
             {past.slice(0, 10).map((apt) => (
               <div
                 key={apt.id}
-                className="bg-dark-light/50 border border-dark-border rounded-lg p-4 flex items-center justify-between opacity-60"
+                className="bg-dark-light/50 border border-dark-border rounded-lg p-4 flex items-center justify-between opacity-60 hover:opacity-100 transition-opacity"
               >
                 <div>
                   <p className="text-text text-sm">{apt.title}</p>
@@ -155,17 +155,31 @@ export default async function CalendarPage() {
                       ` · ${(apt.clients as unknown as { name: string }).name}`}
                   </p>
                 </div>
-                <span
-                  className={`text-xs ${
-                    apt.status === "completed"
-                      ? "text-success"
-                      : apt.status === "cancelled"
-                      ? "text-error"
-                      : "text-text-dim"
-                  }`}
-                >
-                  {apt.status}
-                </span>
+                <div className="flex items-center gap-3">
+                  <span
+                    className={`text-xs ${
+                      apt.status === "completed"
+                        ? "text-success"
+                        : apt.status === "cancelled"
+                        ? "text-error"
+                        : "text-text-dim"
+                    }`}
+                  >
+                    {apt.status}
+                  </span>
+                  <AppointmentActions
+                    appointment={{
+                      id: apt.id,
+                      title: apt.title,
+                      scheduled_at: apt.scheduled_at,
+                      duration_minutes: apt.duration_minutes,
+                      meeting_url: apt.meeting_url,
+                      status: apt.status,
+                      client_id: apt.client_id,
+                    }}
+                    clients={clients || []}
+                  />
+                </div>
               </div>
             ))}
           </div>

@@ -9,6 +9,10 @@ export async function POST(request: Request) {
       data: { user },
     } = await supabase.auth.getUser();
 
+    if (!user) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
     const { action, entityType, entityId, metadata } = await request.json();
 
     if (!action || !entityType || !entityId) {
@@ -18,7 +22,7 @@ export async function POST(request: Request) {
       );
     }
 
-    await logAudit(action, entityType, entityId, user?.id, metadata);
+    await logAudit(action, entityType, entityId, user.id, metadata);
     return NextResponse.json({ ok: true });
   } catch {
     // Audit errors must never propagate to clients

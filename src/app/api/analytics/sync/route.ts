@@ -5,8 +5,8 @@ export async function POST(request: Request) {
   try {
     // Verify API key for cron security
     const authHeader = request.headers.get("authorization");
-    const expectedKey = process.env.SUPABASE_SERVICE_KEY;
-    if (authHeader !== `Bearer ${expectedKey}`) {
+    const expectedKey = process.env.CRON_SECRET;
+    if (!expectedKey || authHeader !== `Bearer ${expectedKey}`) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
