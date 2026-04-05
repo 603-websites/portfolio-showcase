@@ -64,7 +64,7 @@ export default async function CalendarPage() {
             className="flex items-center gap-2 border border-dark-border rounded-lg px-4 py-2.5 text-sm font-medium text-text-muted hover:text-text hover:border-accent/50 transition"
           >
             <ExternalLink className="w-4 h-4" />
-            Google Calendar
+            Book a Meeting
           </a>
           <NewAppointmentModal clients={clients || []} />
         </div>
