@@ -12,9 +12,9 @@ const projectTypes = [
 ];
 
 const budgetRanges = [
-  "Starter ($99/mo)",
-  "Growth ($199/mo)",
-  "Pro ($299/mo)",
+  "Starter ($100/mo)",
+  "Professional ($300/mo)",
+  "Enterprise ($600/mo)",
   "Not sure yet",
 ];
 

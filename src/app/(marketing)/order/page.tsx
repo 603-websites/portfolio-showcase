@@ -3,11 +3,11 @@
 import { useState, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { Check, Loader2 } from "lucide-react";
-import { pricingPlans } from "@/data/pricing";
+import { pricingTiersList, formatPrice } from "@/config/pricing";
 
 function OrderForm() {
   const searchParams = useSearchParams();
-  const defaultPlan = searchParams.get("plan") || "growth";
+  const defaultPlan = searchParams.get("plan") || "professional";
 
   const [plan, setPlan] = useState(defaultPlan);
   const [name, setName] = useState("");
@@ -19,7 +19,7 @@ function OrderForm() {
   const [error, setError] = useState("");
   const [fallback, setFallback] = useState(false);
 
-  const selectedPlan = pricingPlans.find((p) => p.id === plan) || pricingPlans[1];
+  const selectedPlan = pricingTiersList.find((p) => p.id === plan) || pricingTiersList[1];
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -70,7 +70,7 @@ function OrderForm() {
               started:
             </p>
             <a
-              href={`mailto:louissader42@gmail.com?subject=New ${selectedPlan.name} Subscription&body=Name: ${name}%0AEmail: ${email}%0ABusiness: ${businessName}%0APlan: ${selectedPlan.name} ($${selectedPlan.price}/mo)%0A%0A${description}`}
+              href={`mailto:louissader42@gmail.com?subject=New ${selectedPlan.name} Subscription&body=Name: ${name}%0AEmail: ${email}%0ABusiness: ${businessName}%0APlan: ${selectedPlan.name} (${formatPrice(selectedPlan.monthlyCents)}/mo)%0A%0A${description}`}
               className="bg-accent hover:bg-accent-hover text-white rounded-lg px-6 py-3 font-medium transition inline-block"
             >
               Send Email to Get Started
@@ -96,7 +96,7 @@ function OrderForm() {
           <div>
             <h2 className="text-lg font-semibold mb-4">1. Choose your plan</h2>
             <div className="grid md:grid-cols-3 gap-4">
-              {pricingPlans.map((p) => (
+              {pricingTiersList.map((p) => (
                 <button
                   key={p.id}
                   type="button"
@@ -114,13 +114,13 @@ function OrderForm() {
                     )}
                   </div>
                   <p className="text-2xl font-bold text-text">
-                    ${p.price}
+                    {formatPrice(p.monthlyCents)}
                     <span className="text-sm text-text-muted font-normal">
                       /mo
                     </span>
                   </p>
                   <p className="text-text-dim text-xs mt-1">
-                    + ${p.setupFee} setup
+                    + {formatPrice(p.upfrontCents)} setup
                   </p>
                 </button>
               ))}
@@ -212,7 +212,7 @@ function OrderForm() {
             {loading ? (
               <Loader2 className="w-5 h-5 animate-spin" />
             ) : (
-              `Proceed to Checkout: $${selectedPlan.price}/mo`
+              `Proceed to Checkout: ${formatPrice(selectedPlan.monthlyCents)}/mo`
             )}
           </button>
         </form>

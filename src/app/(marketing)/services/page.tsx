@@ -2,12 +2,12 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { Check, X, Rocket, Server, Shield, ArrowRight } from "lucide-react";
 import SectionReveal from "@/components/marketing/SectionReveal";
-import { pricingPlans, comparisonFeatures } from "@/data/pricing";
+import { pricingTiersList, comparisonFeatures, LOWEST_MONTHLY, HIGHEST_MONTHLY, formatPrice } from "@/config/pricing";
 
 export const metadata: Metadata = {
   title: "Website Plans & Pricing | Website Upgraders",
   description:
-    "Affordable managed website plans starting at $99/month. Includes design, hosting, SEO, and ongoing maintenance. No contracts, cancel anytime.",
+    "Affordable managed website plans starting at $100/month. Includes design, hosting, SEO, and ongoing maintenance. No contracts, cancel anytime.",
 };
 
 const promises = [
@@ -45,8 +45,8 @@ const serviceSchema = {
   offers: {
     "@type": "AggregateOffer",
     priceCurrency: "USD",
-    lowPrice: "99",
-    highPrice: "299",
+    lowPrice: "100",
+    highPrice: "600",
     offerCount: "3",
   },
 };
@@ -74,7 +74,7 @@ export default function ServicesPage() {
         {/* Pricing Cards */}
         <SectionReveal delay={0.1}>
           <div className="grid md:grid-cols-3 gap-8 mb-20">
-            {pricingPlans.map((plan) => (
+            {pricingTiersList.map((plan) => (
               <div
                 key={plan.id}
                 className={`bg-dark-light border rounded-2xl p-8 relative ${
@@ -94,11 +94,11 @@ export default function ServicesPage() {
                 <p className="text-text-dim text-sm mb-6">{plan.tagline}</p>
                 <div className="mb-8">
                   <span className="text-5xl font-bold text-text">
-                    ${plan.price}
+                    {formatPrice(plan.monthlyCents)}
                   </span>
                   <span className="text-text-muted">/mo</span>
                   <p className="text-text-dim text-sm mt-1">
-                    + ${plan.setupFee} one-time setup
+                    + {formatPrice(plan.upfrontCents)} one-time setup
                   </p>
                 </div>
                 <ul className="space-y-3 mb-8">
@@ -141,7 +141,7 @@ export default function ServicesPage() {
                       <th className="text-left p-4 text-text-muted text-sm font-medium">
                         Feature
                       </th>
-                      {pricingPlans.map((plan) => (
+                      {pricingTiersList.map((plan) => (
                         <th
                           key={plan.id}
                           className="p-4 text-center text-sm font-medium text-text"
@@ -164,7 +164,7 @@ export default function ServicesPage() {
                         <td className="p-4 text-text-muted text-sm">
                           {feature.name}
                         </td>
-                        {(["starter", "growth", "pro"] as const).map((plan) => {
+                        {(["starter", "professional", "enterprise"] as const).map((plan) => {
                           const val = feature[plan];
                           return (
                             <td

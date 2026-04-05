@@ -1,12 +1,7 @@
 import { NextResponse } from "next/server";
 import Stripe from "stripe";
 import { withTimeout, TimeoutError } from "@/lib/fetch";
-
-const PRICES: Record<string, number> = {
-  starter: 10000,
-  growth: 20000,
-  pro: 25000,
-};
+import { PRICING_TIERS, getTier, formatPrice } from "@/config/pricing";
 
 function getStripe() {
   return new Stripe(process.env.STRIPE_SECRET_KEY!, {
@@ -29,8 +24,8 @@ export async function POST(request: Request) {
       return NextResponse.json({ fallback: true });
     }
 
-    const amount = PRICES[pkg];
-    if (!amount) {
+    const tier = getTier(pkg);
+    if (!tier) {
       return NextResponse.json(
         { error: "Invalid package" },
         { status: 400 }
@@ -39,11 +34,10 @@ export async function POST(request: Request) {
 
     const origin =
       process.env.NEXT_PUBLIC_SITE_URL ||
-      "https://websites-sader-carter.vercel.app";
+      "https://website-upgraders.vercel.app";
 
     const stripe = getStripe();
 
-    // Item 15 — timeout wrapper; rejects after 10 seconds
     const session = await withTimeout(
       stripe.checkout.sessions.create({
         mode: "payment",
@@ -53,12 +47,10 @@ export async function POST(request: Request) {
             price_data: {
               currency: "usd",
               product_data: {
-                name: `${
-                  pkg.charAt(0).toUpperCase() + pkg.slice(1)
-                } Website Package`,
+                name: `${tier.name} Website Package`,
                 description: description?.trim() || undefined,
               },
-              unit_amount: amount,
+              unit_amount: tier.upfrontCents,
             },
             quantity: 1,
           },

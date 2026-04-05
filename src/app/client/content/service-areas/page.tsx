@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { AlertCircle, MapPin, Plus, Trash2, Loader2 } from "lucide-react";
+import { AlertCircle, MapPin, Plus, Trash2, Loader2, Pencil, Check, X } from "lucide-react";
 import toast from "react-hot-toast";
 import SessionExpiredModal from "@/components/shared/SessionExpiredModal";
 
@@ -18,6 +18,9 @@ export default function ServiceAreasPage() {
   const [newLabel, setNewLabel] = useState("");
   const [adding, setAdding] = useState(false);
   const [deleting, setDeleting] = useState<string | null>(null);
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [editLabel, setEditLabel] = useState("");
+  const [saving, setSaving] = useState(false);
 
   useEffect(() => {
     const load = async () => {
@@ -43,6 +46,24 @@ export default function ServiceAreasPage() {
     if (!res.ok) { toast.error("Failed to add area."); }
     else { setAreas([...areas, data]); setNewLabel(""); toast.success("Area added!"); }
     setAdding(false);
+  };
+
+  const updateArea = async (id: string) => {
+    if (!editLabel.trim()) return;
+    setSaving(true);
+    const res = await fetch(`/api/client/content/service-areas/${id}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ label: editLabel.trim() }),
+    });
+    if (!res.ok) { toast.error("Failed to update."); }
+    else {
+      const updated = await res.json();
+      setAreas(areas.map((a) => (a.id === id ? updated : a)));
+      toast.success("Updated!");
+    }
+    setSaving(false);
+    setEditingId(null);
   };
 
   const deleteArea = async (id: string) => {
@@ -95,14 +116,43 @@ export default function ServiceAreasPage() {
           {areas.map((area) => (
             <div key={area.id} className="flex items-center gap-2 bg-dark-lighter border border-dark-border rounded-full px-3 py-1.5">
               <MapPin className="w-3.5 h-3.5 text-accent" />
-              <span className="text-sm text-text">{area.label}</span>
-              <button
-                onClick={() => area.id && deleteArea(area.id)}
-                disabled={deleting === area.id}
-                className="text-text-dim hover:text-error transition ml-1"
-              >
-                {deleting === area.id ? <Loader2 className="w-3 h-3 animate-spin" /> : <Trash2 className="w-3 h-3" />}
-              </button>
+              {editingId === area.id ? (
+                <>
+                  <input
+                    value={editLabel}
+                    onChange={(e) => setEditLabel(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") updateArea(area.id!);
+                      if (e.key === "Escape") setEditingId(null);
+                    }}
+                    className="bg-dark border border-dark-border rounded px-2 py-0.5 text-sm text-text outline-none focus:border-accent w-32"
+                    autoFocus
+                  />
+                  <button onClick={() => updateArea(area.id!)} disabled={saving} className="text-success hover:text-success/80 transition">
+                    {saving ? <Loader2 className="w-3 h-3 animate-spin" /> : <Check className="w-3 h-3" />}
+                  </button>
+                  <button onClick={() => setEditingId(null)} className="text-text-dim hover:text-text transition">
+                    <X className="w-3 h-3" />
+                  </button>
+                </>
+              ) : (
+                <>
+                  <span className="text-sm text-text">{area.label}</span>
+                  <button
+                    onClick={() => { setEditingId(area.id!); setEditLabel(area.label); }}
+                    className="text-text-dim hover:text-accent transition ml-1"
+                  >
+                    <Pencil className="w-3 h-3" />
+                  </button>
+                  <button
+                    onClick={() => area.id && deleteArea(area.id)}
+                    disabled={deleting === area.id}
+                    className="text-text-dim hover:text-error transition"
+                  >
+                    {deleting === area.id ? <Loader2 className="w-3 h-3 animate-spin" /> : <Trash2 className="w-3 h-3" />}
+                  </button>
+                </>
+              )}
             </div>
           ))}
         </div>

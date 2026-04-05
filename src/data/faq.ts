@@ -17,7 +17,7 @@ export const faqItems: FAQItem[] = [
   {
     question: "How much does a website cost?",
     answer:
-      "Every project is different, so we provide custom quotes based on your needs. We offer simple monthly plans starting at $99/month with a one-time setup fee. Book a free consultation to get a quote.",
+      "Every project is different, so we provide custom quotes based on your needs. We offer simple monthly plans starting at $100/month with a one-time setup fee. Book a free consultation to get a quote.",
   },
   {
     question: "What's your process like?",

@@ -51,6 +51,50 @@ export async function POST(request: Request) {
 
   try {
     switch (event.type) {
+      case "checkout.session.completed": {
+        const session = event.data.object as Stripe.Checkout.Session;
+        const subId =
+          typeof session.subscription === "string"
+            ? session.subscription
+            : session.subscription?.id;
+        const plan = session.metadata?.plan;
+        const customerName = session.metadata?.customerName;
+
+        if (subId && plan) {
+          // Link the Stripe subscription to the client if they exist
+          const { data: client } = await supabase
+            .from("clients")
+            .select("id")
+            .eq("email", session.customer_email)
+            .single();
+
+          if (client) {
+            await supabase
+              .from("clients")
+              .update({
+                stripe_subscription_id: subId,
+                stripe_customer_id:
+                  typeof session.customer === "string"
+                    ? session.customer
+                    : session.customer?.id,
+                plan,
+                subscription_status: "active",
+                status: "active",
+              })
+              .eq("id", client.id);
+
+            await logAudit(
+              "checkout_completed",
+              "client",
+              client.id,
+              undefined,
+              { plan, stripe_subscription_id: subId }
+            );
+          }
+        }
+        break;
+      }
+
       case "customer.subscription.updated": {
         const sub = event.data.object as Stripe.Subscription;
         await supabase

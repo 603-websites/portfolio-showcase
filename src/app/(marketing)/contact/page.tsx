@@ -21,7 +21,7 @@ const localBusinessSchema = {
     { "@type": "State", name: "Massachusetts" },
     { "@type": "Country", name: "United States" },
   ],
-  priceRange: "$99-$299/month",
+  priceRange: "$100-$600/month",
 };
 
 export default function ContactPage() {

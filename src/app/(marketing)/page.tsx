@@ -47,7 +47,7 @@ import ProjectBrowser from "@/components/marketing/ProjectBrowser";
 import FAQAccordion from "@/components/marketing/FAQAccordion";
 import { projects } from "@/data/projects";
 import { faqItems } from "@/data/faq";
-import { pricingPlans } from "@/data/pricing";
+import { pricingTiersList, formatPrice } from "@/config/pricing";
 
 const faqSchema = {
   "@context": "https://schema.org",
@@ -239,7 +239,7 @@ export default function HomePage() {
               billing.
             </p>
             <div className="grid md:grid-cols-3 gap-8">
-              {pricingPlans.map((plan) => (
+              {pricingTiersList.map((plan) => (
                 <div
                   key={plan.id}
                   className={`bg-dark-light border rounded-2xl p-8 relative ${
@@ -259,11 +259,11 @@ export default function HomePage() {
                   <p className="text-text-dim text-sm mb-4">{plan.tagline}</p>
                   <div className="mb-6">
                     <span className="text-4xl font-bold text-text">
-                      ${plan.price}
+                      {formatPrice(plan.monthlyCents)}
                     </span>
                     <span className="text-text-muted">/mo</span>
                     <p className="text-text-dim text-sm mt-1">
-                      + ${plan.setupFee} one-time setup
+                      + {formatPrice(plan.upfrontCents)} one-time setup
                     </p>
                   </div>
                   <ul className="space-y-3 mb-8">
