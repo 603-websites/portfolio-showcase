@@ -16,6 +16,8 @@ const OPTIONAL_VARS = [
   "STRIPE_STARTER_PRICE_ID",
   "STRIPE_GROWTH_PRICE_ID",
   "STRIPE_PRO_PRICE_ID",
+  "FACEBOOK_APP_ID",
+  "FACEBOOK_APP_SECRET",
 ] as const;
 
 const REQUIRED_VARS = [...CRITICAL_VARS, ...OPTIONAL_VARS] as const;
@@ -52,4 +54,6 @@ export const env = {
   STRIPE_STARTER_PRICE_ID: process.env.STRIPE_STARTER_PRICE_ID as string,
   STRIPE_GROWTH_PRICE_ID: process.env.STRIPE_GROWTH_PRICE_ID as string,
   STRIPE_PRO_PRICE_ID: process.env.STRIPE_PRO_PRICE_ID as string,
+  FACEBOOK_APP_ID: process.env.FACEBOOK_APP_ID as string,
+  FACEBOOK_APP_SECRET: process.env.FACEBOOK_APP_SECRET as string,
 } satisfies Record<RequiredVar, string>;

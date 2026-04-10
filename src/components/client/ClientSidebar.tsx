@@ -23,6 +23,7 @@ import {
   Wrench,
   MapPin,
   Tag,
+  Share2,
 } from "lucide-react";
 
 const restaurantContentItems = [
@@ -161,6 +162,18 @@ export default function ClientSidebar({
           }`}
         >
           <Calendar className="w-5 h-5" /> Meetings
+        </Link>
+
+        <Link
+          href="/client/social"
+          onClick={() => setMobileOpen(false)}
+          className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition ${
+            isActive("/client/social")
+              ? "bg-accent/10 text-accent"
+              : "text-text-muted hover:text-text hover:bg-dark-lighter"
+          }`}
+        >
+          <Share2 className="w-5 h-5" /> Social Media
         </Link>
 
         <Link
